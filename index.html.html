@@ -1,0 +1,1275 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Big Data - Reportería, GA4, GTM & Business Intelligence</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            dark: '#0B1120',
+                            navy: '#0F172A',
+                            accent: '#06B6D4', // Cyan
+                            lightCyan: '#22D3EE',
+                            blue: '#3B82F6',
+                            purple: '#8B5CF6'
+                        },
+                        tool: {
+                            looker: '#4285F4',
+                            powerbi: '#F2C811',
+                            tableau: '#E97627',
+                            ga4: '#F9AB00',
+                            gtm: '#246FDB'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .glass-card {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glass-card:hover {
+            border-color: rgba(6, 182, 212, 0.35);
+            box-shadow: 0 10px 30px -10px rgba(6, 182, 212, 0.15);
+        }
+        .hero-gradient {
+            background: radial-gradient(circle at 50% 20%, rgba(6, 182, 212, 0.15) 0%, rgba(139, 92, 246, 0.08) 45%, rgba(11, 17, 32, 1) 75%);
+        }
+        .step-active {
+            border-color: #06B6D4;
+            background-color: rgba(6, 182, 212, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-brand-dark text-slate-200 font-sans antialiased selection:bg-brand-accent selection:text-brand-dark min-h-screen flex flex-col justify-between">
+
+    <!-- Navigation Bar -->
+    <header class="fixed top-0 left-0 w-full z-50 glass-card border-b border-slate-800/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Logo -->
+            <button onclick="navigateTo('home')" class="flex items-center gap-3 group text-left focus:outline-none">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-accent via-brand-blue to-brand-purple flex items-center justify-center text-slate-900 shadow-lg shadow-brand-accent/20 group-hover:scale-105 transition-transform duration-300">
+                    <i data-lucide="bar-chart-3" class="w-6 h-6 stroke-[2.5] text-white"></i>
+                </div>
+                <span class="text-2xl font-extrabold tracking-tight text-white">
+                    BIG <span class="text-brand-accent">DATA</span>
+                </span>
+            </button>
+
+            <!-- Desktop Navigation -->
+            <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-300">
+                <button onclick="navigateTo('home')" class="nav-link hover:text-brand-accent transition-colors" id="nav-home">Inicio</button>
+                <button onclick="navigateTo('home', 'servicios')" class="nav-link hover:text-brand-accent transition-colors">Servicios</button>
+                <button onclick="navigateTo('home', 'precios')" class="nav-link hover:text-brand-accent transition-colors">Precios</button>
+                <button onclick="navigateTo('cotizador')" class="nav-link hover:text-brand-accent transition-colors flex items-center gap-1.5" id="nav-cotizador">
+                    <i data-lucide="calculator" class="w-4 h-4 text-brand-accent"></i> Cotizador
+                </button>
+                <button onclick="navigateTo('home', 'contacto')" class="nav-link hover:text-brand-accent transition-colors">Contacto</button>
+            </nav>
+
+            <!-- Action Buttons -->
+            <div class="hidden md:flex items-center gap-4">
+                <button onclick="navigateTo('checkout')" class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium text-xs border border-slate-700 transition-all flex items-center gap-2">
+                    <i data-lucide="shopping-cart" class="w-4 h-4 text-brand-accent"></i>
+                    <span id="cartCountBadge" class="bg-brand-accent text-slate-950 px-1.5 py-0.5 rounded-full text-[10px] font-bold">1</span>
+                    Checkout
+                </button>
+                <button onclick="navigateTo('cotizador')" class="px-5 py-2.5 rounded-lg bg-gradient-to-r from-brand-accent to-brand-blue text-slate-950 font-bold text-sm hover:opacity-90 transition-all shadow-md shadow-brand-accent/20">
+                    Cotizar Proyecto
+                </button>
+            </div>
+
+            <!-- Mobile Menu Toggle -->
+            <button id="menuBtn" class="md:hidden text-slate-300 hover:text-white focus:outline-none">
+                <i data-lucide="menu" class="w-7 h-7"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Navigation Drawer -->
+        <div id="mobileMenu" class="hidden md:hidden border-t border-slate-800 bg-brand-navy px-6 py-4 space-y-3">
+            <button onclick="navigateTo('home'); toggleMobileMenu()" class="block w-full text-left text-slate-300 hover:text-brand-accent py-1">Inicio</button>
+            <button onclick="navigateTo('home', 'servicios'); toggleMobileMenu()" class="block w-full text-left text-slate-300 hover:text-brand-accent py-1">Servicios</button>
+            <button onclick="navigateTo('home', 'precios'); toggleMobileMenu()" class="block w-full text-left text-slate-300 hover:text-brand-accent py-1">Precios & Planes</button>
+            <button onclick="navigateTo('cotizador'); toggleMobileMenu()" class="block w-full text-left text-slate-300 hover:text-brand-accent py-1 font-semibold text-brand-accent flex items-center gap-2">
+                <i data-lucide="calculator" class="w-4 h-4"></i> Cotizador Interactivo
+            </button>
+            <button onclick="navigateTo('checkout'); toggleMobileMenu()" class="block w-full text-left text-slate-300 hover:text-brand-accent py-1 flex items-center gap-2">
+                <i data-lucide="shopping-cart" class="w-4 h-4 text-brand-accent"></i> Finalizar Compra / Checkout
+            </button>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER FOR SPA VIEWS -->
+    <main class="flex-grow pt-20">
+
+        <!-- VIEW 1: LANDING PRINCIPAL -->
+        <section id="view-home" class="view-section">
+            <!-- Hero Section -->
+            <div class="relative pt-12 pb-20 md:pt-24 md:pb-32 hero-gradient overflow-hidden">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-800/80 border border-slate-700/60 text-brand-accent text-xs sm:text-sm font-semibold mb-8 backdrop-blur-md">
+                        <span class="flex h-2 w-2 rounded-full bg-brand-accent animate-ping"></span>
+                        Analítica End-to-End: Medición, GA4, GTM & Dashboards Executive
+                    </div>
+
+                    <h1 class="text-4xl sm:text-6xl font-black text-white tracking-tight max-w-4xl mx-auto leading-tight">
+                        Transformamos Tus Datos en Decisiones Estratégicas
+                    </h1>
+
+                    <p class="mt-6 text-lg sm:text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed">
+                        Servicios profesionales de reportería avanzada en <span class="text-slate-200 font-semibold">Looker Studio, Power BI, Tableau</span> y arquitectura de medición con <span class="text-slate-200 font-semibold">GA4 & GTM</span>.
+                    </p>
+
+                    <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+                        <button onclick="navigateTo('home', 'precios')" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-gradient-to-r from-brand-accent to-brand-blue text-slate-950 font-bold text-base shadow-xl shadow-brand-accent/25 hover:shadow-brand-accent/40 hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2">
+                            Ver Soluciones & Precios
+                            <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                        </button>
+                        <button onclick="navigateTo('cotizador')" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-slate-800/90 hover:bg-slate-800 text-slate-200 font-semibold text-base border border-slate-700 transition-all flex items-center justify-center gap-2">
+                            <i data-lucide="calculator" class="w-5 h-5 text-brand-accent"></i>
+                            Ir al Cotizador Personalizado
+                        </button>
+                    </div>
+
+                    <!-- Metrics bar -->
+                    <div class="mt-20 grid grid-cols-2 md:grid-cols-4 gap-6 pt-10 border-t border-slate-800/80 max-w-4xl mx-auto">
+                        <div>
+                            <p class="text-3xl font-extrabold text-white">+200</p>
+                            <p class="text-xs sm:text-sm text-slate-400 mt-1">Dashboards Entregados</p>
+                        </div>
+                        <div>
+                            <p class="text-3xl font-extrabold text-white">100%</p>
+                            <p class="text-xs sm:text-sm text-slate-400 mt-1">Cumplimiento GA4 & GTM</p>
+                        </div>
+                        <div>
+                            <p class="text-3xl font-extrabold text-white">&lt;24h</p>
+                            <p class="text-xs sm:text-sm text-slate-400 mt-1">Respuesta Comercial</p>
+                        </div>
+                        <div>
+                            <p class="text-3xl font-extrabold text-white">4.9/5</p>
+                            <p class="text-xs sm:text-sm text-slate-400 mt-1">Satisfacción Clientes</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Services Section -->
+            <div id="servicios" class="py-20 bg-brand-navy/50 relative border-t border-slate-800/60">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center max-w-3xl mx-auto mb-16">
+                        <h2 class="text-xs font-bold text-brand-accent uppercase tracking-wider mb-2">Ecosistema Completo de Datos</h2>
+                        <p class="text-3xl sm:text-4xl font-extrabold text-white">Soluciones de Medición y Visualización</p>
+                        <p class="text-slate-400 mt-4 text-base">Cubrimos todo el ciclo de vida del dato, desde la captura web precisa hasta el cuadro de mando gerencial.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <div class="glass-card p-8 rounded-2xl">
+                            <div class="w-12 h-12 rounded-xl bg-brand-accent/10 border border-brand-accent/20 flex items-center justify-center text-brand-accent mb-6">
+                                <i data-lucide="bar-chart-2" class="w-6 h-6"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-white mb-2">Dashboards de Reportería</h3>
+                            <p class="text-slate-400 text-sm mb-4">Paneles interactivos de alto impacto visual adaptados a decisiones de negocio.</p>
+                            <button onclick="openPDP('powerbi')" class="text-brand-accent text-xs font-bold hover:underline inline-flex items-center gap-1">Saber más <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i></button>
+                        </div>
+
+                        <div class="glass-card p-8 rounded-2xl">
+                            <div class="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 mb-6">
+                                <i data-lucide="activity" class="w-6 h-6"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-white mb-2">Implementación GA4</h3>
+                            <p class="text-slate-400 text-sm mb-4">Configuración limpia de Google Analytics 4, embudos, eventos y e-commerce avanzado.</p>
+                            <button onclick="openPDP('ga4')" class="text-brand-accent text-xs font-bold hover:underline inline-flex items-center gap-1">Saber más <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i></button>
+                        </div>
+
+                        <div class="glass-card p-8 rounded-2xl">
+                            <div class="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 mb-6">
+                                <i data-lucide="tag" class="w-6 h-6"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-white mb-2">Google Tag Manager (GTM)</h3>
+                            <p class="text-slate-400 text-sm mb-4">Arquitectura de dataLayer, etiquetas de conversión, píxeles de Ads y clicks.</p>
+                            <button onclick="openPDP('gtm')" class="text-brand-accent text-xs font-bold hover:underline inline-flex items-center gap-1">Saber más <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pricing & Packages Grid Section -->
+            <div id="precios" class="py-24 relative">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center max-w-3xl mx-auto mb-16">
+                        <h2 class="text-xs font-bold text-brand-accent uppercase tracking-wider mb-2">Catálogo de Servicios</h2>
+                        <p class="text-3xl sm:text-4xl font-extrabold text-white">Catálogo Transparente con Entrega Garantizada</p>
+                        <p class="text-slate-400 mt-4 text-base">Selecciona un servicio para explorar su galería detallada o pásalo directamente al checkout.</p>
+                    </div>
+
+                    <!-- Products Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        
+                        <!-- Product 1: Looker Studio -->
+                        <div class="glass-card rounded-2xl p-7 flex flex-col justify-between">
+                            <div>
+                                <div class="flex justify-between items-center mb-4">
+                                    <span class="px-3 py-1 rounded-md bg-[#4285F4]/15 text-[#4285F4] border border-[#4285F4]/30 text-xs font-bold">Looker Studio</span>
+                                    <span class="text-xs text-slate-400">Reportería</span>
+                                </div>
+                                <h3 class="text-xl font-bold text-white">Dashboard Agile Looker</h3>
+                                <p class="text-slate-400 text-xs mt-2 mb-4">Conexión a conectores nativos de Google Ads, GA4 y Looker Studio.</p>
+                                <div class="text-3xl font-black text-white mb-4">$150 <span class="text-xs font-normal text-slate-400">USD</span></div>
+                            </div>
+                            <div class="space-y-2 pt-4 border-t border-slate-800">
+                                <button onclick="openPDP('looker')" class="w-full py-2.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold transition-all border border-slate-700 mb-2">
+                                    Ver Ejemplos & Detalle
+                                </button>
+                                <button onclick="quickAddToCart('looker')" class="w-full py-2.5 rounded-lg bg-brand-accent hover:bg-cyan-400 text-slate-950 text-xs font-extrabold transition-all">
+                                    Contratar Directo
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Product 2: Power BI -->
+                        <div class="glass-card rounded-2xl p-7 flex flex-col justify-between border-2 border-brand-accent/50 relative">
+                            <div class="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 bg-brand-accent text-slate-950 text-[10px] font-black uppercase rounded-full">Más Solicitado</div>
+                            <div>
+                                <div class="flex justify-between items-center mb-4 mt-1">
+                                    <span class="px-3 py-1 rounded-md bg-[#F2C811]/15 text-[#F2C811] border border-[#F2C811]/30 text-xs font-bold">Power BI</span>
+                                    <span class="text-xs text-slate-400">Reportería</span>
+                                </div>
+                                <h3 class="text-xl font-bold text-white">Dashboard Power BI Corporate</h3>
+                                <p class="text-slate-400 text-xs mt-2 mb-4">Modelado relacional, métricas DAX avanzadas y diseño Ejecutivo.</p>
+                                <div class="text-3xl font-black text-white mb-4">$300 <span class="text-xs font-normal text-slate-400">USD</span></div>
+                            </div>
+                            <div class="space-y-2 pt-4 border-t border-slate-800">
+                                <button onclick="openPDP('powerbi')" class="w-full py-2.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold transition-all border border-slate-700 mb-2">
+                                    Ver Ejemplos & Detalle
+                                </button>
+                                <button onclick="quickAddToCart('powerbi')" class="w-full py-2.5 rounded-lg bg-brand-accent hover:bg-cyan-400 text-slate-950 text-xs font-extrabold transition-all">
+                                    Contratar Directo
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Product 3: Tableau -->
+                        <div class="glass-card rounded-2xl p-7 flex flex-col justify-between">
+                            <div>
+                                <div class="flex justify-between items-center mb-4">
+                                    <span class="px-3 py-1 rounded-md bg-[#E97627]/15 text-[#E97627] border border-[#E97627]/30 text-xs font-bold">Tableau</span>
+                                    <span class="text-xs text-slate-400">Reportería</span>
+                                </div>
+                                <h3 class="text-xl font-bold text-white">Tableau Enterprise Visuals</h3>
+                                <p class="text-slate-400 text-xs mt-2 mb-4">Visualización interactiva avanzada para grandes volúmenes de datos.</p>
+                                <div class="text-3xl font-black text-white mb-4">$500 <span class="text-xs font-normal text-slate-400">USD</span></div>
+                            </div>
+                            <div class="space-y-2 pt-4 border-t border-slate-800">
+                                <button onclick="openPDP('tableau')" class="w-full py-2.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold transition-all border border-slate-700 mb-2">
+                                    Ver Ejemplos & Detalle
+                                </button>
+                                <button onclick="quickAddToCart('tableau')" class="w-full py-2.5 rounded-lg bg-brand-accent hover:bg-cyan-400 text-slate-950 text-xs font-extrabold transition-all">
+                                    Contratar Directo
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Product 4: GA4 Setup -->
+                        <div class="glass-card rounded-2xl p-7 flex flex-col justify-between">
+                            <div>
+                                <div class="flex justify-between items-center mb-4">
+                                    <span class="px-3 py-1 rounded-md bg-[#F9AB00]/15 text-[#F9AB00] border border-[#F9AB00]/30 text-xs font-bold">GA4</span>
+                                    <span class="text-xs text-slate-400">Medición</span>
+                                </div>
+                                <h3 class="text-xl font-bold text-white">Google Analytics 4 Setup</h3>
+                                <p class="text-slate-400 text-xs mt-2 mb-4">Configuración desde cero de Propiedad GA4, Eventos y embudo.</p>
+                                <div class="text-3xl font-black text-white mb-4">$120 <span class="text-xs font-normal text-slate-400">USD</span></div>
+                            </div>
+                            <div class="space-y-2 pt-4 border-t border-slate-800">
+                                <button onclick="openPDP('ga4')" class="w-full py-2.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold transition-all border border-slate-700 mb-2">
+                                    Ver Ejemplos & Detalle
+                                </button>
+                                <button onclick="quickAddToCart('ga4')" class="w-full py-2.5 rounded-lg bg-brand-accent hover:bg-cyan-400 text-slate-950 text-xs font-extrabold transition-all">
+                                    Contratar Directo
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Product 5: GTM Setup -->
+                        <div class="glass-card rounded-2xl p-7 flex flex-col justify-between">
+                            <div>
+                                <div class="flex justify-between items-center mb-4">
+                                    <span class="px-3 py-1 rounded-md bg-[#246FDB]/15 text-[#246FDB] border border-[#246FDB]/30 text-xs font-bold">GTM</span>
+                                    <span class="text-xs text-slate-400">Tagging</span>
+                                </div>
+                                <h3 class="text-xl font-bold text-white">Google Tag Manager Setup</h3>
+                                <p class="text-slate-400 text-xs mt-2 mb-4">Contenedor Web, Triggers, DataLayer e integración de Píxeles.</p>
+                                <div class="text-3xl font-black text-white mb-4">$100 <span class="text-xs font-normal text-slate-400">USD</span></div>
+                            </div>
+                            <div class="space-y-2 pt-4 border-t border-slate-800">
+                                <button onclick="openPDP('gtm')" class="w-full py-2.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold transition-all border border-slate-700 mb-2">
+                                    Ver Ejemplos & Detalle
+                                </button>
+                                <button onclick="quickAddToCart('gtm')" class="w-full py-2.5 rounded-lg bg-brand-accent hover:bg-cyan-400 text-slate-950 text-xs font-extrabold transition-all">
+                                    Contratar Directo
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Product 6: Combo Tracking -->
+                        <div class="glass-card rounded-2xl p-7 flex flex-col justify-between border border-brand-purple/50 bg-brand-purple/5">
+                            <div>
+                                <div class="flex justify-between items-center mb-4">
+                                    <span class="px-3 py-1 rounded-md bg-brand-purple/20 text-brand-purple border border-brand-purple/40 text-xs font-bold">Combo Pro</span>
+                                    <span class="text-xs text-emerald-400 font-semibold">Ahorras $30 USD</span>
+                                </div>
+                                <h3 class="text-xl font-bold text-white">Full Tracking (GA4 + GTM)</h3>
+                                <p class="text-slate-400 text-xs mt-2 mb-4">Implementación completa end-to-end de analítica web y medición de conversión.</p>
+                                <div class="text-3xl font-black text-white mb-4">$190 <span class="text-xs font-normal text-slate-400">USD</span></div>
+                            </div>
+                            <div class="space-y-2 pt-4 border-t border-slate-800">
+                                <button onclick="openPDP('combo')" class="w-full py-2.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold transition-all border border-slate-700 mb-2">
+                                    Ver Ejemplos & Detalle
+                                </button>
+                                <button onclick="quickAddToCart('combo')" class="w-full py-2.5 rounded-lg bg-brand-purple hover:bg-purple-500 text-white text-xs font-extrabold transition-all">
+                                    Contratar Directo
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Section -->
+            <div id="contacto" class="py-20 bg-brand-navy/30 border-t border-slate-800/80">
+                <div class="max-w-4xl mx-auto px-4 text-center">
+                    <h2 class="text-3xl font-extrabold text-white mb-4">¿Tienes dudas sobre cuál herramienta necesitas?</h2>
+                    <p class="text-slate-400 mb-8">Nuestros analistas pueden orientarte de manera gratuita para recomendarte la mejor alternativa según tu presupuesto y stack técnico.</p>
+                    <button onclick="navigateTo('cotizador')" class="px-8 py-3.5 rounded-xl bg-brand-accent text-slate-950 font-bold text-sm hover:bg-cyan-400 transition-all inline-flex items-center gap-2">
+                        <i data-lucide="calculator" class="w-4 h-4"></i> Abrir Cotizador Interactivo
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- VIEW 2: PRODUCT DETAIL PAGE (PDP) -->
+        <section id="view-pdp" class="view-section hidden py-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <!-- Back Button -->
+                <button onclick="navigateTo('home', 'precios')" class="mb-8 inline-flex items-center gap-2 text-slate-400 hover:text-brand-accent text-sm transition-colors">
+                    <i data-lucide="arrow-left" class="w-4 h-4"></i> Volver al Catálogo
+                </button>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+                    <!-- Left Column: Gallery and Images -->
+                    <div class="lg:col-span-7 space-y-6">
+                        <div class="glass-card rounded-2xl p-4 overflow-hidden border border-slate-700">
+                            <img id="pdpMainImage" src="" alt="Ejemplo de Reporte" class="w-full h-80 sm:h-96 object-cover rounded-xl shadow-lg">
+                        </div>
+                        <!-- Thumbnail Gallery -->
+                        <div class="grid grid-cols-3 gap-4" id="pdpGalleryThumbs">
+                            <!-- Populated dynamically via JavaScript -->
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Details & Pricing CTA -->
+                    <div class="lg:col-span-5 space-y-6">
+                        <div class="glass-card p-8 rounded-2xl border border-slate-700/80">
+                            <span id="pdpBadge" class="px-3 py-1 rounded-md text-xs font-bold inline-block mb-3">
+                                Category
+                            </span>
+                            <h1 id="pdpTitle" class="text-3xl font-black text-white">Título del Producto</h1>
+                            <p id="pdpDescription" class="text-slate-400 text-sm mt-3 leading-relaxed">
+                                Descripción detallada del servicio...
+                            </p>
+
+                            <div class="my-6 py-4 border-y border-slate-800 flex items-baseline justify-between">
+                                <span class="text-slate-400 text-sm">Precio Final Servicio:</span>
+                                <div>
+                                    <span id="pdpPrice" class="text-4xl font-black text-white">$0</span>
+                                    <span class="text-slate-400 text-xs"> USD</span>
+                                </div>
+                            </div>
+
+                            <div class="space-y-3 mb-8">
+                                <p class="text-xs font-bold text-slate-300 uppercase tracking-wider">¿Qué incluye este entregable?</p>
+                                <ul id="pdpFeatures" class="space-y-2 text-xs text-slate-300">
+                                    <!-- Populated dynamically -->
+                                </ul>
+                            </div>
+
+                            <div class="space-y-3">
+                                <button id="pdpAddToCartBtn" onclick="" class="w-full py-3.5 rounded-xl bg-brand-accent hover:bg-cyan-400 text-slate-950 font-extrabold text-sm transition-all shadow-lg shadow-brand-accent/20 flex items-center justify-center gap-2">
+                                    <i data-lucide="shopping-cart" class="w-4 h-4"></i> Ir a Checkout con este Servicio
+                                </button>
+                                <button onclick="navigateTo('cotizador')" class="w-full py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs border border-slate-700 transition-all flex items-center justify-center gap-2">
+                                    <i data-lucide="sliders" class="w-4 h-4 text-brand-accent"></i> Personalizar en Cotizador
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- VIEW 3: COTIZADOR INTERACTIVO (DEDICATED LANDING / SECTION) -->
+        <section id="view-cotizador" class="view-section hidden py-12">
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+                <!-- Header -->
+                <div class="text-center max-w-2xl mx-auto mb-10">
+                    <span class="px-3 py-1 rounded-full bg-brand-accent/10 border border-brand-accent/30 text-brand-accent text-xs font-bold uppercase tracking-wider">
+                        Cotizador Interactivo Dinámico
+                    </span>
+                    <h1 class="text-3xl sm:text-4xl font-black text-white mt-3">Diseña tu Paquete de Analítica</h1>
+                    <p class="text-slate-400 text-sm mt-2">Configura los requerimientos exactos de tu empresa y obtén una cotización instantánea lista para contratar.</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                    <!-- Configurator Left -->
+                    <div class="lg:col-span-8 glass-card p-6 sm:p-8 rounded-2xl border border-slate-700 space-y-8">
+                        
+                        <!-- Step 1: Base Service Selection -->
+                        <div>
+                            <label class="block text-sm font-bold text-white mb-3 flex items-center gap-2">
+                                <span class="w-6 h-6 rounded-full bg-brand-accent text-slate-950 text-xs font-bold flex items-center justify-center">1</span>
+                                Tipo de Servicio Principal
+                            </label>
+                            <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                                <button onclick="setQuoteBaseService('Looker Studio', 150)" class="quote-type-btn p-3 rounded-xl border border-slate-700 bg-slate-900 text-left hover:border-brand-accent transition-all">
+                                    <div class="text-xs font-bold text-white">Looker Studio</div>
+                                    <div class="text-[11px] text-slate-400">$150 USD base</div>
+                                </button>
+                                <button onclick="setQuoteBaseService('Power BI', 300)" class="quote-type-btn p-3 rounded-xl border border-slate-700 bg-slate-900 text-left hover:border-brand-accent transition-all">
+                                    <div class="text-xs font-bold text-white">Power BI</div>
+                                    <div class="text-[11px] text-slate-400">$300 USD base</div>
+                                </button>
+                                <button onclick="setQuoteBaseService('Tableau', 500)" class="quote-type-btn p-3 rounded-xl border border-slate-700 bg-slate-900 text-left hover:border-brand-accent transition-all">
+                                    <div class="text-xs font-bold text-white">Tableau</div>
+                                    <div class="text-[11px] text-slate-400">$500 USD base</div>
+                                </button>
+                                <button onclick="setQuoteBaseService('GA4 Setup', 120)" class="quote-type-btn p-3 rounded-xl border border-slate-700 bg-slate-900 text-left hover:border-brand-accent transition-all">
+                                    <div class="text-xs font-bold text-white">GA4 Analytics</div>
+                                    <div class="text-[11px] text-slate-400">$120 USD base</div>
+                                </button>
+                                <button onclick="setQuoteBaseService('GTM Setup', 100)" class="quote-type-btn p-3 rounded-xl border border-slate-700 bg-slate-900 text-left hover:border-brand-accent transition-all">
+                                    <div class="text-xs font-bold text-white">GTM Tagging</div>
+                                    <div class="text-[11px] text-slate-400">$100 USD base</div>
+                                </button>
+                                <button onclick="setQuoteBaseService('Full Tracking', 190)" class="quote-type-btn p-3 rounded-xl border border-slate-700 bg-slate-900 text-left hover:border-brand-accent transition-all">
+                                    <div class="text-xs font-bold text-white">Combo GA4+GTM</div>
+                                    <div class="text-[11px] text-slate-400">$190 USD base</div>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Step 2: Data Sources / Scale -->
+                        <div>
+                            <label class="block text-sm font-bold text-white mb-3 flex items-center gap-2">
+                                <span class="w-6 h-6 rounded-full bg-brand-accent text-slate-950 text-xs font-bold flex items-center justify-center">2</span>
+                                Cantidad de Fuentes de Datos o Vistas
+                            </label>
+                            <div class="flex items-center gap-4 bg-slate-900 p-4 rounded-xl border border-slate-800">
+                                <input type="range" id="quoteSourcesRange" min="1" max="10" value="1" oninput="updateQuoteCalculation()" class="w-full accent-brand-accent">
+                                <span id="quoteSourcesVal" class="text-lg font-bold text-brand-accent w-12 text-right">1</span>
+                            </div>
+                            <p class="text-[11px] text-slate-500 mt-1">($40 USD adicionales por cada fuente extra)</p>
+                        </div>
+
+                        <!-- Step 3: Optional Addons -->
+                        <div>
+                            <label class="block text-sm font-bold text-white mb-3 flex items-center gap-2">
+                                <span class="w-6 h-6 rounded-full bg-brand-accent text-slate-950 text-xs font-bold flex items-center justify-center">3</span>
+                                Módulos Extras y Servicios Complementarios
+                            </label>
+                            <div class="space-y-2">
+                                <label class="flex items-center justify-between p-3 rounded-xl bg-slate-900 border border-slate-800 hover:border-slate-700 cursor-pointer">
+                                    <div class="flex items-center gap-3">
+                                        <input type="checkbox" id="addonDAX" onchange="updateQuoteCalculation()" class="accent-brand-accent w-4 h-4">
+                                        <span class="text-xs text-slate-200">Modelado Avanzado / Métricas Complejas</span>
+                                    </div>
+                                    <span class="text-xs font-semibold text-brand-accent">+$80 USD</span>
+                                </label>
+                                <label class="flex items-center justify-between p-3 rounded-xl bg-slate-900 border border-slate-800 hover:border-slate-700 cursor-pointer">
+                                    <div class="flex items-center gap-3">
+                                        <input type="checkbox" id="addonEcommerce" onchange="updateQuoteCalculation()" class="accent-brand-accent w-4 h-4">
+                                        <span class="text-xs text-slate-200">Tracking de E-Commerce Mejorado (Purchase, Cart, Checkout)</span>
+                                    </div>
+                                    <span class="text-xs font-semibold text-brand-accent">+$90 USD</span>
+                                </label>
+                                <label class="flex items-center justify-between p-3 rounded-xl bg-slate-900 border border-slate-800 hover:border-slate-700 cursor-pointer">
+                                    <div class="flex items-center gap-3">
+                                        <input type="checkbox" id="addonSLA" onchange="updateQuoteCalculation()" class="accent-brand-accent w-4 h-4">
+                                        <span class="text-xs text-slate-200">Soporte y Mantenimiento Prioritario (30 Días)</span>
+                                    </div>
+                                    <span class="text-xs font-semibold text-brand-accent">+$70 USD</span>
+                                </label>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Summary Column Right -->
+                    <div class="lg:col-span-4 glass-card p-6 rounded-2xl border border-brand-accent/40 relative sticky top-28">
+                        <h3 class="text-lg font-bold text-white mb-4 border-b border-slate-800 pb-3 flex items-center gap-2">
+                            <i data-lucide="receipt" class="w-5 h-5 text-brand-accent"></i>
+                            Resumen de Cotización
+                        </h3>
+
+                        <div class="space-y-3 text-xs text-slate-300">
+                            <div class="flex justify-between">
+                                <span class="text-slate-400">Servicio Base:</span>
+                                <span id="summaryBaseName" class="font-semibold text-white">Power BI</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-slate-400">Precio Base:</span>
+                                <span id="summaryBasePrice" class="font-semibold text-white">$300 USD</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-slate-400">Fuentes adicionales:</span>
+                                <span id="summarySourcesPrice" class="font-semibold text-white">$0 USD</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-slate-400">Módulos Extra:</span>
+                                <span id="summaryAddonsPrice" class="font-semibold text-white">$0 USD</span>
+                            </div>
+                        </div>
+
+                        <div class="my-6 pt-4 border-t border-slate-800 flex items-baseline justify-between">
+                            <span class="text-slate-200 font-bold text-sm">Total Estimado:</span>
+                            <span id="summaryTotalQuote" class="text-3xl font-black text-brand-accent">$300 USD</span>
+                        </div>
+
+                        <button onclick="applyQuoteToCheckout()" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-brand-accent to-brand-blue text-slate-950 font-black text-sm hover:opacity-90 transition-all shadow-lg shadow-brand-accent/20 flex items-center justify-center gap-2">
+                            <i data-lucide="shopping-cart" class="w-4 h-4"></i> Pasar este Paquete al Checkout
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- VIEW 4: LANDING DE CHECKOUT / PROCESAMIENTO DE PAGO -->
+        <section id="view-checkout" class="view-section hidden py-12">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <div class="text-center max-w-xl mx-auto mb-10">
+                    <span class="px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-bold uppercase tracking-wider">
+                        Checkout Seguro 128-bit SSL
+                    </span>
+                    <h1 class="text-3xl font-black text-white mt-3">Finaliza tu Contratación</h1>
+                    <p class="text-slate-400 text-sm mt-1">Completa los datos de tu empresa para iniciar el proyecto de inmediato.</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+                    
+                    <!-- Left: Form -->
+                    <div class="lg:col-span-7 glass-card p-6 sm:p-8 rounded-2xl border border-slate-700 space-y-6">
+                        
+                        <!-- Client Information -->
+                        <div>
+                            <h3 class="text-base font-bold text-white mb-4 flex items-center gap-2">
+                                <i data-lucide="user" class="w-4 h-4 text-brand-accent"></i> 1. Información de la Empresa
+                            </h3>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-400 mb-1">Nombre Completo *</label>
+                                    <input type="text" id="chkName" required placeholder="Ej. Carlos Mendoza" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-brand-accent">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-400 mb-1">Correo Corporativo *</label>
+                                    <input type="email" id="chkEmail" required placeholder="carlos@empresa.com" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-brand-accent">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-400 mb-1">Nombre de Empresa / Sitio Web</label>
+                                    <input type="text" id="chkCompany" placeholder="www.miempresa.com" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-brand-accent">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-400 mb-1">Teléfono / WhatsApp</label>
+                                    <input type="text" id="chkPhone" placeholder="+54 9 11 ..." class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-brand-accent">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Payment Methods -->
+                        <div class="pt-4 border-t border-slate-800">
+                            <h3 class="text-base font-bold text-white mb-4 flex items-center gap-2">
+                                <i data-lucide="credit-card" class="w-4 h-4 text-brand-accent"></i> 2. Método de Pago Preferido
+                            </h3>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                <label class="flex flex-col p-3 rounded-xl border border-brand-accent bg-brand-accent/10 cursor-pointer">
+                                    <div class="flex items-center gap-2">
+                                        <input type="radio" name="payMethod" checked class="accent-brand-accent">
+                                        <span class="text-xs font-bold text-white">Tarjeta Débito/Crédito</span>
+                                    </div>
+                                    <span class="text-[10px] text-slate-400 mt-1">Stripe / Visa / Mastercard</span>
+                                </label>
+                                <label class="flex flex-col p-3 rounded-xl border border-slate-700 bg-slate-900 hover:border-slate-600 cursor-pointer">
+                                    <div class="flex items-center gap-2">
+                                        <input type="radio" name="payMethod" class="accent-brand-accent">
+                                        <span class="text-xs font-bold text-white">PayPal</span>
+                                    </div>
+                                    <span class="text-[10px] text-slate-400 mt-1">Pago seguro internacional</span>
+                                </label>
+                                <label class="flex flex-col p-3 rounded-xl border border-slate-700 bg-slate-900 hover:border-slate-600 cursor-pointer">
+                                    <div class="flex items-center gap-2">
+                                        <input type="radio" name="payMethod" class="accent-brand-accent">
+                                        <span class="text-xs font-bold text-white">Transferencia</span>
+                                    </div>
+                                    <span class="text-[10px] text-slate-400 mt-1">Bancaria Directa</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Action Submit -->
+                        <div class="pt-4">
+                            <button onclick="processCheckoutOrder()" class="w-full py-4 rounded-xl bg-gradient-to-r from-emerald-400 to-brand-accent text-slate-950 font-black text-base hover:opacity-95 transition-all shadow-xl shadow-emerald-500/10 flex items-center justify-center gap-2">
+                                <i data-lucide="lock" class="w-4 h-4"></i> Confirmar y Procesar Orden
+                            </button>
+                            <p class="text-[11px] text-slate-500 text-center mt-2">Al confirmar, un representante enviará los accesos al portal de cliente y el acuerdo NDA.</p>
+                        </div>
+
+                    </div>
+
+                    <!-- Right: Order Breakdown -->
+                    <div class="lg:col-span-5 glass-card p-6 rounded-2xl border border-slate-700 h-fit">
+                        <h3 class="text-base font-bold text-white mb-4 pb-3 border-b border-slate-800">Resumen del Pedido</h3>
+                        
+                        <div id="checkoutCartItems" class="space-y-3 text-xs mb-6">
+                            <!-- Populated dynamically via JavaScript -->
+                        </div>
+
+                        <div class="space-y-2 text-xs text-slate-400 border-t border-slate-800 pt-4">
+                            <div class="flex justify-between">
+                                <span>Subtotal:</span>
+                                <span id="chkSubtotal" class="font-semibold text-slate-200">$0 USD</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Impuestos / Tasas:</span>
+                                <span class="font-semibold text-slate-200">$0 USD</span>
+                            </div>
+                            <div class="flex justify-between text-base font-extrabold text-white pt-2 border-t border-slate-800">
+                                <span>Total a Pagar:</span>
+                                <span id="chkTotal" class="text-brand-accent">$0 USD</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- VIEW 5: QUIÉNES SOMOS -->
+        <section id="view-nosotros" class="view-section hidden py-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <button onclick="navigateTo('home')" class="mb-8 inline-flex items-center gap-2 text-slate-400 hover:text-brand-accent text-sm transition-colors">
+                    <i data-lucide="arrow-left" class="w-4 h-4"></i> Volver al Inicio
+                </button>
+
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <span class="px-3 py-1 rounded-full bg-brand-accent/10 border border-brand-accent/30 text-brand-accent text-xs font-bold uppercase tracking-wider">
+                        Quiénes Somos
+                    </span>
+                    <h1 class="text-4xl font-black text-white mt-3">Democratizando el Acceso al Business Intelligence</h1>
+                    <p class="text-slate-400 text-base mt-4 leading-relaxed">
+                        En Big Data Analytics unimos arquitectura de datos moderna, precisión analítica y diseño visual gerencial para ayudar a empresas de todo el mundo a tomar decisiones guiadas por hechos, no por suposiciones.
+                    </p>
+                </div>
+
+                <!-- Values Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
+                    <div class="glass-card p-8 rounded-2xl border border-slate-800">
+                        <div class="w-12 h-12 rounded-xl bg-brand-accent/10 text-brand-accent flex items-center justify-center mb-6">
+                            <i data-lucide="shield-check" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2">Gobernanza & Ética</h3>
+                        <p class="text-slate-400 text-xs leading-relaxed">Respetamos la privacidad por diseño. No almacenamos datos sensibles ni credenciales críticas en nuestros servidores.</p>
+                    </div>
+
+                    <div class="glass-card p-8 rounded-2xl border border-slate-800">
+                        <div class="w-12 h-12 rounded-xl bg-brand-blue/10 text-brand-blue flex items-center justify-center mb-6">
+                            <i data-lucide="zap" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2">Agilidad & Entrega</h3>
+                        <p class="text-slate-400 text-xs leading-relaxed">Entregables funcionales en días, no meses. Sprints analíticos enfocado en el retorno de inversión inmediato.</p>
+                    </div>
+
+                    <div class="glass-card p-8 rounded-2xl border border-slate-800">
+                        <div class="w-12 h-12 rounded-xl bg-brand-purple/10 text-brand-purple flex items-center justify-center mb-6">
+                            <i data-lucide="eye" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2">Claridad Executive</h3>
+                        <p class="text-slate-400 text-xs leading-relaxed">Diseñamos tableros donde los insights saltan a la vista sin saturación de métricas irrelevantes.</p>
+                    </div>
+                </div>
+
+                <!-- Metrics & Team -->
+                <div class="glass-card p-10 rounded-3xl border border-slate-800 mb-16 text-center">
+                    <h2 class="text-2xl font-bold text-white mb-8">Nuestros Resultados en Números</h2>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                        <div>
+                            <p class="text-4xl font-black text-brand-accent">+500</p>
+                            <p class="text-xs text-slate-400 mt-2">Tableros Desplegados</p>
+                        </div>
+                        <div>
+                            <p class="text-4xl font-black text-white">+150</p>
+                            <p class="text-xs text-slate-400 mt-2">Empresas Asesoradas</p>
+                        </div>
+                        <div>
+                            <p class="text-4xl font-black text-brand-accent">99.8%</p>
+                            <p class="text-xs text-slate-400 mt-2">Uptime de Pipelines</p>
+                        </div>
+                        <div>
+                            <p class="text-4xl font-black text-white">12</p>
+                            <p class="text-xs text-slate-400 mt-2">Especialistas Certificados</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Executive Team -->
+                <div>
+                    <h2 class="text-2xl font-bold text-white mb-8 text-center">Liderazgo Técnico</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                        <div class="glass-card p-6 rounded-2xl text-center border border-slate-800">
+                            <div class="w-20 h-20 rounded-full bg-slate-800 border-2 border-brand-accent mx-auto mb-4 overflow-hidden flex items-center justify-center">
+                                <i data-lucide="user" class="w-10 h-10 text-slate-500"></i>
+                            </div>
+                            <h3 class="text-base font-bold text-white">Mariana Costa</h3>
+                            <p class="text-xs text-brand-accent mb-2">Head of Analytics & BI</p>
+                            <p class="text-[11px] text-slate-400">Ex-Senior BI Architect con +10 años implementando Tableau y Power BI en retail multi-país.</p>
+                        </div>
+
+                        <div class="glass-card p-6 rounded-2xl text-center border border-slate-800">
+                            <div class="w-20 h-20 rounded-full bg-slate-800 border-2 border-brand-blue mx-auto mb-4 overflow-hidden flex items-center justify-center">
+                                <i data-lucide="user" class="w-10 h-10 text-slate-500"></i>
+                            </div>
+                            <h3 class="text-base font-bold text-white">Gonzalo Rodríguez</h3>
+                            <p class="text-xs text-brand-blue mb-2">Lead Data Engineer & GTM Specialist</p>
+                            <p class="text-[11px] text-slate-400">Certificado por Google Analytics 4. Especialista en arquitecturas server-side y dataLayer.</p>
+                        </div>
+
+                        <div class="glass-card p-6 rounded-2xl text-center border border-slate-800">
+                            <div class="w-20 h-20 rounded-full bg-slate-800 border-2 border-brand-purple mx-auto mb-4 overflow-hidden flex items-center justify-center">
+                                <i data-lucide="user" class="w-10 h-10 text-slate-500"></i>
+                            </div>
+                            <h3 class="text-base font-bold text-white">Sonia Fernández</h3>
+                            <p class="text-xs text-brand-purple mb-2">Solutions Architect</p>
+                            <p class="text-[11px] text-slate-400">Especialista en integración de bases SQL, conectores REST API y Looker Studio enterprise.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- VIEW 6: LEGALES & POLITICAS -->
+        <section id="view-legales" class="view-section hidden py-12">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <button onclick="navigateTo('home')" class="mb-8 inline-flex items-center gap-2 text-slate-400 hover:text-brand-accent text-sm transition-colors">
+                    <i data-lucide="arrow-left" class="w-4 h-4"></i> Volver al Inicio
+                </button>
+
+                <div class="glass-card p-8 sm:p-12 rounded-3xl border border-slate-800 space-y-10">
+                    <!-- Terms section -->
+                    <div id="legal-terms">
+                        <span class="px-3 py-1 rounded-full bg-slate-800 text-brand-accent text-xs font-bold uppercase tracking-wider">Documento Legal</span>
+                        <h1 class="text-3xl font-black text-white mt-3 mb-6">Términos y Condiciones del Servicio</h1>
+                        
+                        <div class="space-y-4 text-xs sm:text-sm text-slate-300 leading-relaxed">
+                            <p><strong class="text-white">1. Alcance del Servicio:</strong> Big Data Analytics presta servicios de consultoría, desarrollo de cuadros de mando (Looker Studio, Power BI, Tableau) e implementación de herramientas de etiquetado y analítica web (GA4, GTM).</p>
+                            <p><strong class="text-white">2. Propiedad Intelectual:</strong> Al completarse el pago total del servicio, la propiedad intelectual de los tableros creados, scripts de DataLayer y configuraciones pertenecen 100% al cliente.</p>
+                            <p><strong class="text-white">3. Tiempos de Entrega y Revisiones:</strong> Los proyectos estándar incluyen un período de revisión de 14 días hábiles posteriores a la entrega para realizar ajustes de formato o calibración de métricas sin costo adicional.</p>
+                            <p><strong class="text-white">4. Acuerdo de Confidencialidad (NDA):</strong> Todos los servicios incluyen automáticamente un compromiso implícito de confidencialidad estricta respecto a los datos comerciales expuestos.</p>
+                        </div>
+                    </div>
+
+                    <hr class="border-slate-800">
+
+                    <!-- Privacy section -->
+                    <div id="legal-privacy">
+                        <h2 class="text-2xl font-bold text-white mb-4">Política de Privacidad & Protección de Datos</h2>
+                        
+                        <div class="space-y-4 text-xs sm:text-sm text-slate-300 leading-relaxed">
+                            <p><strong class="text-white">1. Principio de Cero Almacenamiento:</strong> No guardamos credenciales directas de bases de datos de nuestros clientes. Trabajar con tokens restringidos, cuentas de servicio o conectores nativos de Google y Microsoft es nuestro estándar obligatorio.</p>
+                            <p><strong class="text-white">2. Cumplimiento GDPR / CCPA:</strong> Las configuraciones de GA4 y GTM se alinean con normativas internacionales de consentimiento de cookies (Consent Mode V2) y anonimización de direcciones IP.</p>
+                            <p><strong class="text-white">3. Datos de Contacto:</strong> La información ingresada en el Cotizador o Checkout se utilizará exclusivamente para el procesamiento comercial de la orden y nunca será compartida con terceros.</p>
+                        </div>
+                    </div>
+
+                    <hr class="border-slate-800">
+
+                    <!-- FAQ & SLA section -->
+                    <div id="legal-faq">
+                        <h2 class="text-2xl font-bold text-white mb-4">Preguntas Frecuentes (FAQ) & SLA</h2>
+                        
+                        <div class="space-y-4 text-xs sm:text-sm text-slate-300">
+                            <div>
+                                <p class="font-bold text-white mb-1">¿Qué sucede si mis bases de datos sufren cambios?</p>
+                                <p class="text-slate-400">Ofrecemos planes opcionales de mantenimiento continuo o ajuste de schema de datos mediante tickets de soporte.</p>
+                            </div>
+                            <div>
+                                <p class="font-bold text-white mb-1">¿Cuál es el tiempo de respuesta del SLA?</p>
+                                <p class="text-slate-400">Los tickets prioritarios de clientes activos reciben respuesta en menos de 4 horas hábiles.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- SUCCESS MODAL FOR CHECKOUT -->
+        <div id="successModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+            <div class="glass-card max-w-md w-full p-8 rounded-3xl border border-emerald-500/40 text-center space-y-4">
+                <div class="w-16 h-16 bg-emerald-500/20 text-emerald-400 rounded-full flex items-center justify-center mx-auto">
+                    <i data-lucide="check-circle" class="w-10 h-10"></i>
+                </div>
+                <h3 class="text-2xl font-black text-white">¡Orden Confirmada!</h3>
+                <p class="text-xs text-slate-300 leading-relaxed">
+                    Hemos registrado exitosamente tu solicitud de servicio. Te enviamos la confirmación e instrucciones de inicio al correo corporativo indicado.
+                </p>
+                <div class="bg-slate-900 p-3 rounded-xl border border-slate-800 text-left text-xs space-y-1">
+                    <p class="text-slate-400">ID de Orden: <span class="text-brand-accent font-mono font-bold" id="modalOrderId">#BD-8921</span></p>
+                    <p class="text-slate-400">Tiempo de Contacto: <span class="text-white font-semibold">&lt; 2 horas hábiles</span></p>
+                </div>
+                <button onclick="closeModalAndHome()" class="w-full py-3 rounded-xl bg-brand-accent text-slate-950 font-bold text-xs hover:bg-cyan-400 transition-all">
+                    Volver al Inicio
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- COMPLETE INTERACTIVE FOOTER -->
+    <footer class="border-t border-slate-800/80 bg-brand-navy/90 pt-16 pb-12 mt-20 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <!-- Main Grid Footer -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-slate-800">
+                
+                <!-- Col 1: Brand & Social -->
+                <div class="lg:col-span-2 space-y-4">
+                    <button onclick="navigateTo('home')" class="flex items-center gap-3 focus:outline-none">
+                        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-brand-accent via-brand-blue to-brand-purple flex items-center justify-center text-slate-900">
+                            <i data-lucide="bar-chart-3" class="w-5 h-5 text-white"></i>
+                        </div>
+                        <span class="text-2xl font-extrabold text-white">BIG <span class="text-brand-accent">DATA</span></span>
+                    </button>
+
+                    <p class="text-xs text-slate-400 leading-relaxed max-w-sm">
+                        Agencia boutique especializada en arquitectura de datos, medición digital con GA4/GTM y reportería gerencial en Looker Studio, Power BI y Tableau.
+                    </p>
+
+                    <!-- Social Networks -->
+                    <div class="flex items-center gap-3 pt-2">
+                        <a href="#" onclick="event.preventDefault()" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-brand-accent hover:text-slate-950 text-slate-300 flex items-center justify-center transition-all" title="LinkedIn">
+                            <i data-lucide="linkedin" class="w-4 h-4"></i>
+                        </a>
+                        <a href="#" onclick="event.preventDefault()" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-brand-accent hover:text-slate-950 text-slate-300 flex items-center justify-center transition-all" title="GitHub">
+                            <i data-lucide="github" class="w-4 h-4"></i>
+                        </a>
+                        <a href="#" onclick="event.preventDefault()" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-brand-accent hover:text-slate-950 text-slate-300 flex items-center justify-center transition-all" title="Twitter / X">
+                            <i data-lucide="twitter" class="w-4 h-4"></i>
+                        </a>
+                        <a href="#" onclick="event.preventDefault()" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-brand-accent hover:text-slate-950 text-slate-300 flex items-center justify-center transition-all" title="YouTube">
+                            <i data-lucide="youtube" class="w-4 h-4"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Col 2: Services / PDP Links -->
+                <div class="space-y-3">
+                    <h4 class="text-xs font-bold text-white uppercase tracking-wider">Servicios & PDPs</h4>
+                    <ul class="space-y-2 text-xs text-slate-400">
+                        <li><button onclick="openPDP('looker')" class="hover:text-brand-accent transition-colors">Looker Studio Dashboard</button></li>
+                        <li><button onclick="openPDP('powerbi')" class="hover:text-brand-accent transition-colors">Power BI Corporate</button></li>
+                        <li><button onclick="openPDP('tableau')" class="hover:text-brand-accent transition-colors">Tableau Enterprise</button></li>
+                        <li><button onclick="openPDP('ga4')" class="hover:text-brand-accent transition-colors">Implementación GA4</button></li>
+                        <li><button onclick="openPDP('gtm')" class="hover:text-brand-accent transition-colors">Configuración GTM</button></li>
+                        <li><button onclick="navigateTo('cotizador')" class="text-brand-accent font-semibold hover:underline">Cotizador On-Demand</button></li>
+                    </ul>
+                </div>
+
+                <!-- Col 3: Company Links -->
+                <div class="space-y-3">
+                    <h4 class="text-xs font-bold text-white uppercase tracking-wider">Nosotros</h4>
+                    <ul class="space-y-2 text-xs text-slate-400">
+                        <li><button onclick="navigateTo('nosotros')" class="hover:text-brand-accent transition-colors">Quiénes Somos</button></li>
+                        <li><button onclick="navigateTo('home', 'servicios')" class="hover:text-brand-accent transition-colors">Nuestra Metodología</button></li>
+                        <li><button onclick="navigateTo('nosotros')" class="hover:text-brand-accent transition-colors">Liderazgo & Equipo</button></li>
+                        <li><button onclick="navigateTo('home', 'precios')" class="hover:text-brand-accent transition-colors">Catálogo Completo</button></li>
+                        <li><button onclick="navigateTo('checkout')" class="hover:text-brand-accent transition-colors">Portal Checkout</button></li>
+                    </ul>
+                </div>
+
+                <!-- Col 4: Legal & Contact -->
+                <div class="space-y-3">
+                    <h4 class="text-xs font-bold text-white uppercase tracking-wider">Legales & Contacto</h4>
+                    <ul class="space-y-2 text-xs text-slate-400">
+                        <li><button onclick="navigateTo('legales', 'legal-terms')" class="hover:text-brand-accent transition-colors">Términos y Condiciones</button></li>
+                        <li><button onclick="navigateTo('legales', 'legal-privacy')" class="hover:text-brand-accent transition-colors">Política de Privacidad</button></li>
+                        <li><button onclick="navigateTo('legales', 'legal-faq')" class="hover:text-brand-accent transition-colors">Preguntas Frecuentes (FAQ)</button></li>
+                        <li class="pt-2 text-slate-300 font-semibold flex items-center gap-1.5">
+                            <i data-lucide="mail" class="w-3.5 h-3.5 text-brand-accent"></i>
+                            contacto@bigdata-analytics.com
+                        </li>
+                        <li class="text-[11px] text-slate-500">Horario: Lun - Vie 9:00 a 18:00 (UTC-3)</li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <!-- Partner Badges & Copyright Bar -->
+            <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+                <div>
+                    &copy; 2026 Big Data Analytics Corp. Todos los derechos reservados.
+                </div>
+
+                <!-- Certifications / Badges -->
+                <div class="flex items-center gap-4 text-[11px]">
+                    <span class="px-2.5 py-1 rounded-md bg-slate-800 border border-slate-700 text-slate-300 flex items-center gap-1">
+                        <i data-lucide="check" class="w-3 h-3 text-emerald-400"></i> Google Analytics Certified
+                    </span>
+                    <span class="px-2.5 py-1 rounded-md bg-slate-800 border border-slate-700 text-slate-300 flex items-center gap-1">
+                        <i data-lucide="check" class="w-3 h-3 text-blue-400"></i> Microsoft Partner
+                    </span>
+                    <span class="px-2.5 py-1 rounded-md bg-slate-800 border border-slate-700 text-slate-300 flex items-center gap-1">
+                        <i data-lucide="check" class="w-3 h-3 text-amber-400"></i> Tableau Specialist
+                    </span>
+                </div>
+            </div>
+
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Mobile Menu Toggle
+        function toggleMobileMenu() {
+            document.getElementById('mobileMenu').classList.toggle('hidden');
+        }
+        document.getElementById('menuBtn').addEventListener('click', toggleMobileMenu);
+
+        // DATA PRODUCTS CATALOG & GALLERIES FOR PDP
+        const productsCatalog = {
+            'looker': {
+                title: 'Dashboard Agile Looker Studio',
+                badge: 'Looker Studio',
+                badgeBg: 'bg-[#4285F4]/20 text-[#4285F4] border-[#4285F4]/40',
+                price: 150,
+                description: 'Diseñado para agilizar reportes de Marketing Digital, Google Ads, Meta Ads y GA4 en una interfaz limpia y compartible.',
+                images: [
+                    'https://placehold.co/800x500/0f172a/4285F4?text=Looker+Studio+Executive+Dashboard',
+                    'https://placehold.co/800x500/0f172a/22d3ee?text=Google+Ads+%26+Meta+Funnel',
+                    'https://placehold.co/800x500/0f172a/3b82f6?text=eCommerce+GA4+Looker+View'
+                ],
+                features: [
+                    'Conexión directa a Google Ads, GA4 y Search Console',
+                    'Filtros interactivos por fecha, canal y campaña',
+                    'Actualización automatizada diaria',
+                    'Acceso web ilimitado para tu equipo'
+                ]
+            },
+            'powerbi': {
+                title: 'Dashboard Power BI Corporate',
+                badge: 'Power BI',
+                badgeBg: 'bg-[#F2C811]/20 text-[#F2C811] border-[#F2C811]/40',
+                price: 300,
+                description: 'Solución empresarial con modelado de datos estrella/copo de nieve, medidas DAX avanzadas y diseño gerencial.',
+                images: [
+                    'https://placehold.co/800x500/0f172a/F2C811?text=Power+BI+Corporate+Executive+View',
+                    'https://placehold.co/800x500/0f172a/06b6d4?text=DAX+Measures+%26+Sales+Matrix',
+                    'https://placehold.co/800x500/0f172a/8b5cf6?text=SQL+Server+Relational+Model'
+                ],
+                features: [
+                    'Modelado relacional y medidas en lenguaje DAX',
+                    'Sincronización con SQL Server, Excel o SharePoint',
+                    'Seguridad a Nivel de Fila (RLS) incluida',
+                    'Optimizada para Power BI Service & Mobile'
+                ]
+            },
+            'tableau': {
+                title: 'Tableau Enterprise Visuals',
+                badge: 'Tableau',
+                badgeBg: 'bg-[#E97627]/20 text-[#E97627] border-[#E97627]/40',
+                price: 500,
+                description: 'El máximo estándar visual para analítica multidimensional, grandes volúmenes de datos e historias de datos complejas.',
+                images: [
+                    'https://placehold.co/800x500/0f172a/E97627?text=Tableau+Enterprise+Multidimensional',
+                    'https://placehold.co/800x500/0f172a/22d3ee?text=Deep+Analytics+%26+Calculated+Fields',
+                    'https://placehold.co/800x500/0f172a/3b82f6?text=BigData+Processing+Story'
+                ],
+                features: [
+                    'Cálculos LOD y analítica avanzada',
+                    'Visualización personalizada de alta fidelidad',
+                    'Optimizado para grandes volúmenes (BigData)',
+                    'Entrega de libro de trabajo (.twbx)'
+                ]
+            },
+            'ga4': {
+                title: 'Google Analytics 4 Setup',
+                badge: 'GA4',
+                badgeBg: 'bg-[#F9AB00]/20 text-[#F9AB00] border-[#F9AB00]/40',
+                price: 120,
+                description: 'Auditoría y configuración profesional de propiedad GA4, vinculación con Google Ads y definición de conversiones.',
+                images: [
+                    'https://placehold.co/800x500/0f172a/F9AB00?text=GA4+Custom+Explorations+%26+Funnels',
+                    'https://placehold.co/800x500/0f172a/06b6d4?text=Conversion+Events+Config',
+                    'https://placehold.co/800x500/0f172a/8b5cf6?text=eCommerce+Purchase+Tracking'
+                ],
+                features: [
+                    'Configuración de propiedad y flujo de datos web',
+                    'Medición mejorada de clicks, scrolls y descargas',
+                    'Definición de eventos clave de conversión',
+                    'Vinculación con Google Ads y Search Console'
+                ]
+            },
+            'gtm': {
+                title: 'Google Tag Manager Setup',
+                badge: 'GTM',
+                badgeBg: 'bg-[#246FDB]/20 text-[#246FDB] border-[#246FDB]/40',
+                price: 100,
+                description: 'Despliegue de contenedor Tag Manager con arquitectura de dataLayer limpia para gestionar todas tus etiquetas sin depender de IT.',
+                images: [
+                    'https://placehold.co/800x500/0f172a/246FDB?text=GTM+DataLayer+%26+Triggers+Setup',
+                    'https://placehold.co/800x500/0f172a/06b6d4?text=Meta+Pixel+%26+GA4+Tags',
+                    'https://placehold.co/800x500/0f172a/8b5cf6?text=Form+Submit+%26+Click+Events'
+                ],
+                features: [
+                    'Creación e integración de Contenedor Web',
+                    'Mapeo de eventos en DataLayer',
+                    'Inyección de Píxeles de Meta, Google Ads y LinkedIn',
+                    'Modo vista previa y pruebas de publicación'
+                ]
+            },
+            'combo': {
+                title: 'Combo Full Tracking (GA4 + GTM)',
+                badge: 'Combo Pro',
+                badgeBg: 'bg-brand-purple/20 text-brand-purple border-brand-purple/40',
+                price: 190,
+                description: 'Implementación integral end-to-end: medición precisa en el sitio con Tag Manager y análisis estructurado en GA4.',
+                images: [
+                    'https://placehold.co/800x500/0f172a/8b5cf6?text=Full+GA4+%2B+GTM+End-to-End+Architecture',
+                    'https://placehold.co/800x500/0f172a/06b6d4?text=Unified+Measurement+Model',
+                    'https://placehold.co/800x500/0f172a/3b82f6?text=Validation+%26+Data+Governance'
+                ],
+                features: [
+                    'Implementación completa de GA4 y GTM',
+                    'Mapeo exhaustivo de conversiones y leads',
+                    'Documentación técnica de arquitectura de tags',
+                    'Ahorro directo de $30 USD en paquete'
+                ]
+            }
+        };
+
+        // GLOBAL CART STATE
+        let currentCart = [
+            { id: 'powerbi', name: 'Dashboard Power BI Corporate', price: 300 }
+        ];
+
+        // ROUTING ENGINE (SPA SINGLE PAGE APPLICATION)
+        function navigateTo(viewId, targetElementId = null) {
+            // Hide all view sections
+            document.querySelectorAll('.view-section').forEach(sec => sec.classList.add('hidden'));
+
+            // Show target view
+            const targetView = document.getElementById(`view-${viewId}`);
+            if (targetView) {
+                targetView.classList.remove('hidden');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            // Scroll to sub-element if provided
+            if (targetElementId) {
+                setTimeout(() => {
+                    const el = document.getElementById(targetElementId);
+                    if (el) el.scrollIntoView({ behavior: 'smooth' });
+                }, 100);
+            }
+
+            // Refresh cart breakdown on checkout view
+            if (viewId === 'checkout') {
+                renderCheckoutSummary();
+            }
+        }
+
+        // OPEN PDP FUNCTION WITH DYNAMIC GALLERY
+        function openPDP(productId) {
+            const prod = productsCatalog[productId];
+            if (!prod) return;
+
+            document.getElementById('pdpTitle').innerText = prod.title;
+            document.getElementById('pdpPrice').innerText = `$${prod.price}`;
+            document.getElementById('pdpDescription').innerText = prod.description;
+            
+            // Badge styling
+            const badge = document.getElementById('pdpBadge');
+            badge.innerText = prod.badge;
+            badge.className = `px-3 py-1 rounded-md text-xs font-bold inline-block mb-3 border ${prod.badgeBg}`;
+
+            // Images and gallery
+            document.getElementById('pdpMainImage').src = prod.images[0];
+            const thumbsContainer = document.getElementById('pdpGalleryThumbs');
+            thumbsContainer.innerHTML = '';
+            
+            prod.images.forEach((imgUrl, idx) => {
+                const thumb = document.createElement('img');
+                thumb.src = imgUrl;
+                thumb.className = `w-full h-20 object-cover rounded-lg border border-slate-700 cursor-pointer hover:border-brand-accent transition-all ${idx === 0 ? 'border-brand-accent' : ''}`;
+                thumb.onclick = () => {
+                    document.getElementById('pdpMainImage').src = imgUrl;
+                    document.querySelectorAll('#pdpGalleryThumbs img').forEach(i => i.classList.remove('border-brand-accent'));
+                    thumb.classList.add('border-brand-accent');
+                };
+                thumbsContainer.appendChild(thumb);
+            });
+
+            // Features list
+            const featuresContainer = document.getElementById('pdpFeatures');
+            featuresContainer.innerHTML = '';
+            prod.features.forEach(ft => {
+                const li = document.createElement('li');
+                li.className = 'flex items-center gap-2';
+                li.innerHTML = `<i data-lucide="check-circle-2" class="w-4 h-4 text-brand-accent shrink-0"></i> <span>${ft}</span>`;
+                featuresContainer.appendChild(li);
+            });
+
+            // Action button logic
+            document.getElementById('pdpAddToCartBtn').onclick = () => {
+                currentCart = [{ id: productId, name: prod.title, price: prod.price }];
+                updateCartBadge();
+                navigateTo('checkout');
+            };
+
+            lucide.createIcons();
+            navigateTo('pdp');
+        }
+
+        // QUICK ADD TO CART DIRECT TO CHECKOUT
+        function quickAddToCart(productId) {
+            const prod = productsCatalog[productId];
+            if (prod) {
+                currentCart = [{ id: productId, name: prod.title, price: prod.price }];
+                updateCartBadge();
+                navigateTo('checkout');
+            }
+        }
+
+        function updateCartBadge() {
+            document.getElementById('cartCountBadge').innerText = currentCart.length;
+        }
+
+        // INTERACTIVE QUOTE BUILDER LOGIC
+        let quoteState = {
+            baseName: 'Power BI',
+            basePrice: 300
+        };
+
+        function setQuoteBaseService(name, price) {
+            quoteState.baseName = name;
+            quoteState.basePrice = price;
+            
+            // UI highlight
+            document.querySelectorAll('.quote-type-btn').forEach(btn => {
+                if (btn.innerText.includes(name)) {
+                    btn.classList.add('border-brand-accent', 'bg-brand-accent/20');
+                } else {
+                    btn.classList.remove('border-brand-accent', 'bg-brand-accent/20');
+                }
+            });
+
+            updateQuoteCalculation();
+        }
+
+        function updateQuoteCalculation() {
+            const sourcesCount = parseInt(document.getElementById('quoteSourcesRange').value);
+            document.getElementById('quoteSourcesVal').innerText = sourcesCount;
+
+            const sourcesExtraPrice = (sourcesCount - 1) * 40;
+            
+            let addonsPrice = 0;
+            if (document.getElementById('addonDAX').checked) addonsPrice += 80;
+            if (document.getElementById('addonEcommerce').checked) addonsPrice += 90;
+            if (document.getElementById('addonSLA').checked) addonsPrice += 70;
+
+            const total = quoteState.basePrice + sourcesExtraPrice + addonsPrice;
+
+            document.getElementById('summaryBaseName').innerText = quoteState.baseName;
+            document.getElementById('summaryBasePrice').innerText = `$${quoteState.basePrice} USD`;
+            document.getElementById('summarySourcesPrice').innerText = `$${sourcesExtraPrice} USD`;
+            document.getElementById('summaryAddonsPrice').innerText = `$${addonsPrice} USD`;
+            document.getElementById('summaryTotalQuote').innerText = `$${total} USD`;
+        }
+
+        function applyQuoteToCheckout() {
+            const totalStr = document.getElementById('summaryTotalQuote').innerText;
+            const totalNum = parseInt(totalStr.replace('$','').replace(' USD',''));
+            
+            currentCart = [{
+                id: 'custom-quote',
+                name: `Paquete Personalizado: ${quoteState.baseName}`,
+                price: totalNum
+            }];
+
+            updateCartBadge();
+            navigateTo('checkout');
+        }
+
+        // CHECKOUT RENDERING & ORDER SUMMARY
+        function renderCheckoutSummary() {
+            const container = document.getElementById('checkoutCartItems');
+            container.innerHTML = '';
+
+            let subtotal = 0;
+            currentCart.forEach(item => {
+                subtotal += item.price;
+                const row = document.createElement('div');
+                row.className = 'flex justify-between items-center p-3 rounded-lg bg-slate-900 border border-slate-800';
+                row.innerHTML = `
+                    <div>
+                        <p class="font-bold text-white text-xs">${item.name}</p>
+                        <p class="text-[10px] text-slate-500">Servicio de Configuración & Entrega</p>
+                    </div>
+                    <span class="font-bold text-brand-accent text-sm">$${item.price} USD</span>
+                `;
+                container.appendChild(row);
+            });
+
+            document.getElementById('chkSubtotal').innerText = `$${subtotal} USD`;
+            document.getElementById('chkTotal').innerText = `$${subtotal} USD`;
+        }
+
+        // PROCESS CHECKOUT SUBMISSION
+        function processCheckoutOrder() {
+            const name = document.getElementById('chkName').value;
+            const email = document.getElementById('chkEmail').value;
+
+            if (!name || !email) {
+                alert('Por favor completa tu nombre y correo corporativo.');
+                return;
+            }
+
+            document.getElementById('modalOrderId').innerText = `#BD-${Math.floor(1000 + Math.random() * 9000)}`;
+            document.getElementById('successModal').classList.remove('hidden');
+        }
+
+        function closeModalAndHome() {
+            document.getElementById('successModal').classList.add('hidden');
+            navigateTo('home');
+        }
+
+        // Initialize view state
+        setQuoteBaseService('Power BI', 300);
+    </script>
+</body>
+</html>
