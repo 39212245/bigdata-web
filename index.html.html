@@ -539,12 +539,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 }
             }
 
-            // Push limpia a la dataLayer para GTM / GA4
+            // Estructura limpia y dinámica con el objeto event_params
             window.dataLayer = window.dataLayer || [];
             window.dataLayer.push({
-                event: 'page_view_virtual',
-                page_path: window.location.pathname,
-                page_title: cleanPath || 'Inicio'
+                event: 'ga4.trackEvent',
+                eventName: 'page_view',
+                event_params: {
+                    page_location: window.location.href,
+                    page_path: window.location.pathname,
+                    page_title: cleanPath || 'Inicio'
+                }
             });
         }
 
@@ -579,6 +583,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
         function handleCheckoutSubmit(e) {
             e.preventDefault();
+            
+            // Ejemplo de disparo del evento generate_lead con la misma arquitectura
+            window.dataLayer = window.dataLayer || [];
+            window.dataLayer.push({
+                event: 'ga4.trackEvent',
+                eventName: 'generate_lead',
+                event_params: {
+                    lead_type: 'cotizacion_proyectos',
+                    currency: 'USD'
+                }
+            });
+
             alert('¡Gracias por tu solicitud! Un especialista se pondrá en contacto en menos de 24 horas.');
             navigateTo(null, '/');
         }
