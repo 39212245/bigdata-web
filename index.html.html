@@ -350,9 +350,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                         <div class="text-xs text-brand-mutedText uppercase tracking-widest font-bold">Total Estimado</div>
                         <div id="quote-total" class="text-4xl font-extrabold text-brand-accent">$0 USD</div>
                     </div>
-                    <a href="/checkout" onclick="navigateTo(event, '/checkout')" class="px-8 py-4 rounded-xl bg-brand-accent text-white font-bold hover:bg-brand-accentHover transition-all shadow-lg shadow-brand-accent/20">
+                    <button onclick="handleAddToCartAndCheckout(event)" class="px-8 py-4 rounded-xl bg-brand-accent text-white font-bold hover:bg-brand-accentHover transition-all shadow-lg shadow-brand-accent/20">
                         Ir al Checkout
-                    </a>
+                    </button>
                 </div>
             </div>
         </div>
@@ -611,6 +611,37 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 const serviceTitle = pdpData[currentPDPKey].title;
                 sessionStorage.setItem('selected_service_pdp', serviceTitle);
             }
+            navigateTo(null, '/checkout');
+        }
+
+        function handleAddToCartAndCheckout(event) {
+            if (event) event.preventDefault();
+
+            const selectedBoxes = Array.from(document.querySelectorAll('.calc-trigger:checked'));
+            
+            let totalAmount = 0;
+            const selectedServices = selectedBoxes.map(cb => {
+                totalAmount += parseInt(cb.value || 0);
+                return cb.dataset.service;
+            });
+
+            const productName = selectedServices.length > 0 
+                ? selectedServices.join(', ') 
+                : 'Sin servicio seleccionado';
+
+            // Disparo del evento add_to_cart con los parametros requeridos
+            window.dataLayer = window.dataLayer || [];
+            window.dataLayer.push({
+                event: 'ga4.trackEvent',
+                eventName: 'add_to_cart',
+                event_params: {
+                    producto: productName,
+                    price: totalAmount,
+                    currency: 'USD'
+                }
+            });
+
+            // Redireccionar al checkout
             navigateTo(null, '/checkout');
         }
 
