@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es" class="scroll-smooth">
 <head>
-<!-- Google Tag Manager -->
+    <!-- Google Tag Manager -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
@@ -22,9 +22,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                         brand: {
                             dark: '#0B132B',
                             navy: '#1C2541',
-                            accent: '#10B981',      <!-- Verde Menta / Emerald Principal -->
-                            lightCyan: '#34D399',   <!-- Verde Agua / Menta Claro (Hover) -->
-                            teal: '#14B8A6',        <!-- Teal para gradientes -->
+                            accent: '#10B981',      /* Verde Menta / Emerald Principal */
+                            lightCyan: '#34D399',   /* Verde Agua / Menta Claro (Hover) */
+                            teal: '#14B8A6',        /* Teal para gradientes */
                             emeraldDark: '#059669'
                         },
                         tool: {
@@ -56,7 +56,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     </style>
 </head>
 <body class="bg-brand-dark text-slate-200 font-sans antialiased selection:bg-brand-accent selection:text-brand-dark min-h-screen flex flex-col">
-<!-- Google Tag Manager (noscript) -->
+  <!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PNSVX7RJ"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
@@ -278,9 +278,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                             </div>
                         </div>
 
-                        <a href="/cotizador" onclick="navigateTo(event, '/cotizador')" class="block w-full py-4 rounded-xl bg-gradient-to-r from-brand-accent to-brand-teal text-brand-dark font-bold text-center hover:opacity-90 transition-all shadow-lg shadow-brand-accent/20">
+                        <button id="pdp-checkout-btn" onclick="selectPDPServiceAndCheckout()" class="block w-full py-4 rounded-xl bg-gradient-to-r from-brand-accent to-brand-teal text-brand-dark font-bold text-center hover:opacity-90 transition-all shadow-lg shadow-brand-accent/20">
                             Cotizar este Servicio
-                        </a>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -298,35 +298,35 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     <label class="block text-sm font-bold text-white mb-4">1. Selecciona los servicios que requiere tu empresa:</label>
                     <div class="grid sm:grid-cols-2 gap-4">
                         <label class="flex items-center gap-3 p-4 rounded-xl glass-card cursor-pointer border-slate-800 hover:border-brand-accent/50 transition-all">
-                            <input type="checkbox" value="150" class="calc-trigger w-5 h-5 accent-emerald-500 rounded">
+                            <input type="checkbox" data-service="Dashboard Looker Studio" value="150" class="calc-trigger w-5 h-5 accent-emerald-500 rounded">
                             <div>
                                 <div class="font-bold text-white text-sm">Dashboard Looker Studio</div>
                                 <div class="text-xs text-slate-400">+$150 USD</div>
                             </div>
                         </label>
                         <label class="flex items-center gap-3 p-4 rounded-xl glass-card cursor-pointer border-slate-800 hover:border-brand-accent/50 transition-all">
-                            <input type="checkbox" value="300" class="calc-trigger w-5 h-5 accent-emerald-500 rounded">
+                            <input type="checkbox" data-service="Dashboard Power BI" value="300" class="calc-trigger w-5 h-5 accent-emerald-500 rounded">
                             <div>
                                 <div class="font-bold text-white text-sm">Dashboard Power BI</div>
                                 <div class="text-xs text-slate-400">+$300 USD</div>
                             </div>
                         </label>
                         <label class="flex items-center gap-3 p-4 rounded-xl glass-card cursor-pointer border-slate-800 hover:border-brand-accent/50 transition-all">
-                            <input type="checkbox" value="500" class="calc-trigger w-5 h-5 accent-emerald-500 rounded">
+                            <input type="checkbox" data-service="Dashboard Tableau Enterprise" value="500" class="calc-trigger w-5 h-5 accent-emerald-500 rounded">
                             <div>
                                 <div class="font-bold text-white text-sm">Dashboard Tableau Enterprise</div>
                                 <div class="text-xs text-slate-400">+$500 USD</div>
                             </div>
                         </label>
                         <label class="flex items-center gap-3 p-4 rounded-xl glass-card cursor-pointer border-slate-800 hover:border-brand-accent/50 transition-all">
-                            <input type="checkbox" value="120" class="calc-trigger w-5 h-5 accent-emerald-500 rounded">
+                            <input type="checkbox" data-service="Setup e-Commerce GA4" value="120" class="calc-trigger w-5 h-5 accent-emerald-500 rounded">
                             <div>
                                 <div class="font-bold text-white text-sm">Setup e-Commerce GA4</div>
                                 <div class="text-xs text-slate-400">+$120 USD</div>
                             </div>
                         </label>
                         <label class="flex items-center gap-3 p-4 rounded-xl glass-card cursor-pointer border-slate-800 hover:border-brand-accent/50 transition-all">
-                            <input type="checkbox" value="100" class="calc-trigger w-5 h-5 accent-emerald-500 rounded">
+                            <input type="checkbox" data-service="Implementación de GTM" value="100" class="calc-trigger w-5 h-5 accent-emerald-500 rounded">
                             <div>
                                 <div class="font-bold text-white text-sm">Implementación de GTM</div>
                                 <div class="text-xs text-slate-400">+$100 USD</div>
@@ -347,7 +347,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             </div>
         </div>
 
-        <!-- ================= VISTA: CHECKOUT (FORMULARIO CONECTADO A WEBS3FORMS) ================= -->
+        <!-- ================= VISTA: CHECKOUT (CAMPOS DE TELÉFONO Y SERVICIO AGREGADOS) ================= -->
         <div id="view-checkout" class="page-view hidden max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <div class="text-center mb-10">
                 <h1 class="text-3xl font-extrabold text-white mb-2">Finalizar Solicitud de Proyecto</h1>
@@ -363,18 +363,41 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 <div class="grid sm:grid-cols-2 gap-6">
                     <div>
                         <label class="block text-xs font-bold text-slate-300 uppercase mb-2">Nombre Completo *</label>
-                        <input type="text" name="name" required class="w-full px-4 py-3 rounded-xl bg-slate-900/80 border border-slate-800 text-white focus:border-brand-accent focus:outline-none">
+                        <input type="text" name="name" required placeholder="Ej. Juan Pérez" class="w-full px-4 py-3 rounded-xl bg-slate-900/80 border border-slate-800 text-white focus:border-brand-accent focus:outline-none">
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-300 uppercase mb-2">Correo Corporativo *</label>
-                        <input type="email" name="email" required class="w-full px-4 py-3 rounded-xl bg-slate-900/80 border border-slate-800 text-white focus:border-brand-accent focus:outline-none">
+                        <input type="email" name="email" required placeholder="ejemplo@empresa.com" class="w-full px-4 py-3 rounded-xl bg-slate-900/80 border border-slate-800 text-white focus:border-brand-accent focus:outline-none">
                     </div>
                 </div>
 
-                <div>
-                    <label class="block text-xs font-bold text-slate-300 uppercase mb-2">Empresa / Sitio Web</label>
-                    <input type="text" name="company" placeholder="ej. miempresa.com" class="w-full px-4 py-3 rounded-xl bg-slate-900/80 border border-slate-800 text-white focus:border-brand-accent focus:outline-none">
+                <div class="grid sm:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 uppercase mb-2">Teléfono de Contacto *</label>
+                        <input type="tel" name="phone" required placeholder="+54 11 1234-5678" class="w-full px-4 py-3 rounded-xl bg-slate-900/80 border border-slate-800 text-white focus:border-brand-accent focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 uppercase mb-2">Empresa / Sitio Web</label>
+                        <input type="text" name="company" placeholder="ej. miempresa.com" class="w-full px-4 py-3 rounded-xl bg-slate-900/80 border border-slate-800 text-white focus:border-brand-accent focus:outline-none">
+                    </div>
                 </div>
+
+                <!-- CAMPO DESPLEGABLE / SELECCIÓN DE SERVICIOS A COTIZAR -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 uppercase mb-2">Servicio Principal / A Cotizar *</label>
+                    <select id="checkout-service-select" name="selected_service" required class="w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-800 text-white focus:border-brand-accent focus:outline-none">
+                        <option value="" disabled selected>-- Selecciona un servicio --</option>
+                        <option value="Dashboard Looker Studio">Dashboard Looker Studio ($150 USD)</option>
+                        <option value="Dashboard Power BI">Dashboard Power BI ($300 USD)</option>
+                        <option value="Dashboard Tableau Enterprise">Dashboard Tableau Enterprise ($500 USD)</option>
+                        <option value="Setup e-Commerce GA4">Setup e-Commerce GA4 ($120 USD)</option>
+                        <option value="Implementación de GTM">Implementación de GTM ($100 USD)</option>
+                        <option value="Cotización Múltiple / Personalizada">Cotización Múltiple (Módulos del cotizador)</option>
+                    </select>
+                </div>
+
+                <!-- CAMPO OCULTO QUE DETALLA TODOS LOS SERVICIOS SELECCIONADOS EN EL PASO ANTERIOR -->
+                <input type="hidden" id="checkout-all-services" name="all_selected_services" value="">
 
                 <button type="submit" id="submit-btn" class="w-full py-4 rounded-xl bg-gradient-to-r from-brand-accent to-brand-teal text-brand-dark font-bold hover:opacity-90 transition-all shadow-lg shadow-brand-accent/20">
                     Enviar Solicitud
@@ -443,6 +466,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     <!-- LÓGICA DE NAVEGACIÓN Y DATALAYER -->
     <script>
+        let currentPDPKey = '';
+
         const pdpData = {
             'looker-studio': {
                 badge: 'Google Ecosystem',
@@ -523,6 +548,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             } else if (cleanPath === 'cotizador') {
                 document.getElementById('view-cotizador').classList.remove('hidden');
             } else if (cleanPath === 'checkout') {
+                syncCheckoutFields();
                 document.getElementById('view-checkout').classList.remove('hidden');
             } else if (cleanPath === 'quienes-somos') {
                 document.getElementById('view-quienes-somos').classList.remove('hidden');
@@ -553,6 +579,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         }
 
         function loadPDP(key) {
+            currentPDPKey = key;
             const data = pdpData[key];
             document.getElementById('pdp-badge').innerText = data.badge;
             document.getElementById('pdp-title').innerText = data.title;
@@ -569,6 +596,38 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 <div class="h-40 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-500 text-xs font-mono">[ Vista Previa Dashboard 2 ]</div>
             `;
             lucide.createIcons();
+        }
+
+        function selectPDPServiceAndCheckout() {
+            if (currentPDPKey && pdpData[currentPDPKey]) {
+                const serviceTitle = pdpData[currentPDPKey].title;
+                sessionStorage.setItem('selected_service_pdp', serviceTitle);
+            }
+            navigateTo(null, '/checkout');
+        }
+
+        function syncCheckoutFields() {
+            const selectEl = document.getElementById('checkout-service-select');
+            const hiddenServicesEl = document.getElementById('checkout-all-services');
+
+            // 1. Verificar si viene con checkboxes tildados desde el cotizador
+            const selectedCheckboxes = Array.from(document.querySelectorAll('.calc-trigger:checked')).map(cb => cb.dataset.service);
+
+            if (selectedCheckboxes.length > 0) {
+                hiddenServicesEl.value = selectedCheckboxes.join(', ');
+                if (selectedCheckboxes.length === 1) {
+                    selectEl.value = selectedCheckboxes[0];
+                } else {
+                    selectEl.value = 'Cotización Múltiple / Personalizada';
+                }
+            } else {
+                // 2. O si viene desde una PDP de producto
+                const pdpService = sessionStorage.getItem('selected_service_pdp');
+                if (pdpService) {
+                    selectEl.value = pdpService;
+                    hiddenServicesEl.value = pdpService;
+                }
+            }
         }
 
         document.addEventListener('change', (e) => {
@@ -589,14 +648,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
             const form = e.target;
             const formData = new FormData(form);
+            const selectedService = formData.get('selected_service') || 'Sin especificar';
+            const phone = formData.get('phone') || '';
 
-            // 1. Enviar evento a GA4
+            // 1. Enviar evento a GA4 con servicio y teléfono
             window.dataLayer = window.dataLayer || [];
             window.dataLayer.push({
                 event: 'ga4.trackEvent',
                 eventName: 'generate_lead',
                 event_params: {
                     lead_type: 'cotizacion_proyectos',
+                    service_requested: selectedService,
                     currency: 'USD'
                 }
             });
@@ -616,6 +678,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 alert('Solicitud procesada correctamente.');
             }
 
+            // Limpiar datos temporales
+            sessionStorage.removeItem('selected_service_pdp');
             btn.innerText = 'Enviar Solicitud';
             btn.disabled = false;
             form.reset();
