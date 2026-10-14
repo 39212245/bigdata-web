@@ -487,7 +487,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     'Filtros dinámicos por fecha, canal de tráfico y campañas.',
                     'Diseño UX corporativo responsivo.'
                 ],
-                time: 'Entrega estimada: 3 - 5 días hábiles'
+                time: 'Entrega estimada: 3 - 5 días hábiles',
+                // Rutas de tus imágenes para Looker Studio
+                images: [
+                    'https://portermetrics.com/wp-content/uploads/2020/09/Instagram-dashbaord-on-Google-Data-Studio-1536x1132.png',
+                    'https://seranking.com/es/blog/wp-content/uploads/sites/13/2025/05/informe-de-rankings-plantillas-de-looker-studio-media-1024x868.png'
+                ]
             },
             'power-bi': {
                 badge: 'Microsoft Ecosystem',
@@ -499,7 +504,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     'Métricas avanzadas escritas en código DAX.',
                     'Publicación y permisos en Power BI Service.'
                 ],
-                time: 'Entrega estimada: 5 - 7 días hábiles'
+                time: 'Entrega estimada: 5 - 7 días hábiles',
+                // Rutas de tus imágenes para Power BI
+                images: [
+                    'https://images.unsplash.com/photo-1543286386-713bdd548da4?auto=format&fit=crop&w=600&q=80',
+                    'https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?auto=format&fit=crop&w=600&q=80'
+                ]
             },
             'tableau': {
                 badge: 'Enterprise Analytics',
@@ -511,7 +521,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     'Optimización de extractos e hiper-archivos.',
                     'Conexión nativa a Data Warehouses (Snowflake, Redshift).'
                 ],
-                time: 'Entrega estimada: 7 - 10 días hábiles'
+                time: 'Entrega estimada: 7 - 10 días hábiles',
+                // Rutas de tus imágenes para Tableau
+                images: [
+                    'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=600&q=80',
+                    'https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=600&q=80'
+                ]
             },
             'ga4': {
                 badge: 'Measurement Setup',
@@ -523,7 +538,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     'Vinculación con Google Search Console y Google Ads.',
                     'Configuración de Consent Mode V2.'
                 ],
-                time: 'Entrega estimada: 2 - 4 días hábiles'
+                time: 'Entrega estimada: 2 - 4 días hábiles',
+                // Rutas de tus imágenes para GA4
+                images: [
+                    'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=600&q=80',
+                    'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=600&q=80'
+                ]
             },
             'gtm': {
                 badge: 'Tag Management',
@@ -535,7 +555,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     'Etiquetas de conversión para Google Ads y Meta Pixel.',
                     'Activadores de clics, formularios y desplazamiento.'
                 ],
-                time: 'Entrega estimada: 2 - 3 días hábiles'
+                time: 'Entrega estimada: 2 - 3 días hábiles',
+                // Rutas de tus imágenes para GTM
+                images: [
+                    'https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?auto=format&fit=crop&w=600&q=80',
+                    'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=600&q=80'
+                ]
             }
         };
 
@@ -598,11 +623,20 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             const list = document.getElementById('pdp-features');
             list.innerHTML = data.features.map(f => `<li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-brand-accent"></i> ${f}</li>`).join('');
 
+            // Renderizado dinámico de la galería según el producto
             const gallery = document.getElementById('pdp-gallery');
-            gallery.innerHTML = `
-                <div class="h-40 rounded-xl bg-slate-100 border border-brand-border flex items-center justify-center text-slate-400 text-xs font-mono">[ Vista Previa Dashboard 1 ]</div>
-                <div class="h-40 rounded-xl bg-slate-100 border border-brand-border flex items-center justify-center text-slate-400 text-xs font-mono">[ Vista Previa Dashboard 2 ]</div>
-            `;
+            if (data.images && data.images.length > 0) {
+                gallery.innerHTML = data.images.map((imgUrl, index) => `
+                    <div class="overflow-hidden rounded-xl border border-brand-border shadow-sm group">
+                        <img src="${imgUrl}" alt="Vista previa ${data.title} ${index + 1}" class="h-44 w-full object-cover group-hover:scale-105 transition-transform duration-300">
+                    </div>
+                `).join('');
+            } else {
+                gallery.innerHTML = `
+                    <div class="h-40 rounded-xl bg-slate-100 border border-brand-border flex items-center justify-center text-slate-400 text-xs font-mono">[ Vista Previa Dashboard 1 ]</div>
+                    <div class="h-40 rounded-xl bg-slate-100 border border-brand-border flex items-center justify-center text-slate-400 text-xs font-mono">[ Vista Previa Dashboard 2 ]</div>
+                `;
+            }
             lucide.createIcons();
         }
 
@@ -730,5 +764,3 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             renderRoute(window.location.pathname);
         });
     </script>
-</body>
-</html>
