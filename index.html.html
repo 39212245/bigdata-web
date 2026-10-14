@@ -651,24 +651,31 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         function handleAddToCartAndCheckout(event) {
             if (event) event.preventDefault();
 
+            // Mapa de IDs numéricos únicos por cada servicio
+            const serviceIdMap = {
+                'Dashboard Looker Studio': 16254,
+                'Dashboard Power BI': 17465,
+                'Dashboard Tableau Enterprise': 19855,
+                'Setup e-Commerce GA4': 12845,
+                'Implementación de GTM': 10655
+            };
+
             const selectedBoxes = Array.from(document.querySelectorAll('.calc-trigger:checked'));
             
             let totalAmount = 0;
             
-            // Construimos el arreglo de ítems dinámicamente con item_id e item_name
+            // Construimos el arreglo de ítems con ID numérico
             const itemsArray = selectedBoxes.map((cb, index) => {
                 const itemPrice = parseInt(cb.value || 0);
                 const itemName = cb.dataset.service || 'Servicio';
                 
                 totalAmount += itemPrice;
 
-                // Generamos un item_id limpio basado en el nombre (ej. "dashboard_power_bi")
-                const itemId = itemName.toLowerCase()
-                                       .replace(/[^a-z0-9]/g, '_')
-                                       .replace(/_+/g, '_');
+                // Retorna el ID numérico correspondiente del mapa (o un número por defecto)
+                const numericItemId = serviceIdMap[itemName] || (200 + index);
 
                 return {
-                    item_id: itemId,
+                    item_id: numericItemId,
                     item_name: itemName,
                     price: itemPrice,
                     quantity: 1
@@ -688,7 +695,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     producto: productNameSummary,
                     price: totalAmount,
                     currency: 'USD',
-                    items: itemsArray // <--- Arreglo dinámico con item_id e item_name
+                    items: itemsArray // <--- Arreglo dinámico con item_id numérico
                 }
             });
 
