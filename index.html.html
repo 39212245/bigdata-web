@@ -357,7 +357,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             </div>
         </div>
 
-        <!-- ================= VISTA: CHECKOUT ================= -->
+        <!-- ================= VISTA: CHECKOUT (CON CHECKBOXES DE SERVICIOS) ================= -->
         <div id="view-checkout" class="page-view hidden max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <div class="text-center mb-10">
                 <h1 class="text-3xl font-extrabold text-brand-darkText mb-2">Finalizar Solicitud de Proyecto</h1>
@@ -367,7 +367,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <!-- Formulario de contacto con endpoint anónimo mediante Web3Forms -->
             <form id="checkout-form" onsubmit="handleCheckoutSubmit(event)" class="glass-card-light rounded-2xl p-8 space-y-6">
                 <!-- TOKEN DE FORMULARIO -->
-                <input type="hidden" name="access_key" value="8f914cf3-abcd-425f-a277-2c3c0348ffcc">
+                <input type="hidden" name="access_key" value="YOUR_WEB3FORMS_ACCESS_KEY">
                 <input type="hidden" name="subject" value="Nuevo Lead de Cotización - Big Data Analytics">
 
                 <div class="grid sm:grid-cols-2 gap-6">
@@ -392,20 +392,38 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     </div>
                 </div>
 
+                <!-- SELECCIÓN DE SERVICIOS EN CHECKBOXES -->
                 <div>
-                    <label class="block text-xs font-bold text-brand-darkText uppercase mb-2">Servicio Principal / A Cotizar *</label>
-                    <select id="checkout-service-select" name="selected_service" required class="w-full px-4 py-3 rounded-xl bg-white border border-brand-border text-brand-darkText focus:border-brand-accent focus:outline-none">
-                        <option value="" disabled selected>-- Selecciona un servicio --</option>
-                        <option value="Dashboard Looker Studio">Dashboard Looker Studio ($150 USD)</option>
-                        <option value="Dashboard Power BI">Dashboard Power BI ($300 USD)</option>
-                        <option value="Dashboard Tableau Enterprise">Dashboard Tableau Enterprise ($500 USD)</option>
-                        <option value="Setup e-Commerce GA4">Setup e-Commerce GA4 ($120 USD)</option>
-                        <option value="Implementación de GTM">Implementación de GTM ($100 USD)</option>
-                        <option value="Cotización Múltiple / Personalizada">Cotización Múltiple (Módulos del cotizador)</option>
-                    </select>
+                    <label class="block text-xs font-bold text-brand-darkText uppercase mb-3">Servicios a Cotizar *</label>
+                    <div class="grid sm:grid-cols-2 gap-3" id="checkout-services-group">
+                        <label class="flex items-center gap-3 p-3.5 rounded-xl bg-white border border-brand-border cursor-pointer hover:border-brand-accent transition-all">
+                            <input type="checkbox" name="services" value="Dashboard Looker Studio" class="checkout-service-cb w-4 h-4 accent-teal-600 rounded">
+                            <span class="text-sm font-semibold text-brand-darkText">Dashboard Looker Studio</span>
+                        </label>
+
+                        <label class="flex items-center gap-3 p-3.5 rounded-xl bg-white border border-brand-border cursor-pointer hover:border-brand-accent transition-all">
+                            <input type="checkbox" name="services" value="Dashboard Power BI" class="checkout-service-cb w-4 h-4 accent-teal-600 rounded">
+                            <span class="text-sm font-semibold text-brand-darkText">Dashboard Power BI</span>
+                        </label>
+
+                        <label class="flex items-center gap-3 p-3.5 rounded-xl bg-white border border-brand-border cursor-pointer hover:border-brand-accent transition-all">
+                            <input type="checkbox" name="services" value="Dashboard Tableau Enterprise" class="checkout-service-cb w-4 h-4 accent-teal-600 rounded">
+                            <span class="text-sm font-semibold text-brand-darkText">Dashboard Tableau Enterprise</span>
+                        </label>
+
+                        <label class="flex items-center gap-3 p-3.5 rounded-xl bg-white border border-brand-border cursor-pointer hover:border-brand-accent transition-all">
+                            <input type="checkbox" name="services" value="Setup e-Commerce GA4" class="checkout-service-cb w-4 h-4 accent-teal-600 rounded">
+                            <span class="text-sm font-semibold text-brand-darkText">Setup e-Commerce GA4</span>
+                        </label>
+
+                        <label class="flex items-center gap-3 p-3.5 rounded-xl bg-white border border-brand-border cursor-pointer hover:border-brand-accent transition-all">
+                            <input type="checkbox" name="services" value="Implementación de GTM" class="checkout-service-cb w-4 h-4 accent-teal-600 rounded">
+                            <span class="text-sm font-semibold text-brand-darkText">Implementación de GTM</span>
+                        </label>
+                    </div>
                 </div>
 
-                <input type="hidden" id="checkout-all-services" name="all_selected_services" value="">
+                <input type="hidden" id="checkout-all-services" name="selected_services_summary" value="">
 
                 <button type="submit" id="submit-btn" class="w-full py-4 rounded-xl bg-brand-accent text-white font-bold hover:bg-brand-accentHover transition-all shadow-lg shadow-brand-accent/20">
                     Enviar Solicitud
@@ -885,46 +903,48 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         }
 
         function syncCheckoutFields() {
-            const selectEl = document.getElementById('checkout-service-select');
-            const hiddenServicesEl = document.getElementById('checkout-all-services');
+            // Desmarcar todas las checkboxes del checkout primero
+            document.querySelectorAll('.checkout-service-cb').forEach(cb => cb.checked = false);
 
-            const selectedCheckboxes = Array.from(document.querySelectorAll('.calc-trigger:checked')).map(cb => cb.dataset.service);
+            // 1. Obtener servicios seleccionados en el cotizador interactivo
+            const selectedFromCalculator = Array.from(document.querySelectorAll('.calc-trigger:checked')).map(cb => cb.dataset.service);
 
-            if (selectedCheckboxes.length > 0) {
-                hiddenServicesEl.value = selectedCheckboxes.join(', ');
-                if (selectedCheckboxes.length === 1) {
-                    selectEl.value = selectedCheckboxes[0];
-                } else {
-                    selectEl.value = 'Cotización Múltiple / Personalizada';
-                }
+            if (selectedFromCalculator.length > 0) {
+                selectedFromCalculator.forEach(serviceName => {
+                    const match = document.querySelector(`.checkout-service-cb[value="${serviceName}"]`);
+                    if (match) match.checked = true;
+                });
             } else {
+                // 2. Si vino desde una PDP
                 const pdpService = sessionStorage.getItem('selected_service_pdp');
                 if (pdpService) {
-                    selectEl.value = pdpService;
-                    hiddenServicesEl.value = pdpService;
+                    const match = document.querySelector(`.checkout-service-cb[value="${pdpService}"]`);
+                    if (match) match.checked = true;
                 }
             }
         }
 
-        document.addEventListener('change', (e) => {
-            if (e.target.classList.contains('calc-trigger')) {
-                let total = 0;
-                document.querySelectorAll('.calc-trigger:checked').forEach(cb => {
-                    total += parseInt(cb.value);
-                });
-                document.getElementById('quote-total').innerText = `$${total} USD`;
-            }
-        });
-
         async function handleCheckoutSubmit(e) {
             e.preventDefault();
             const btn = document.getElementById('submit-btn');
+
+            // Obtener servicios tildados en el formulario de checkout
+            const selectedCBs = Array.from(document.querySelectorAll('.checkout-service-cb:checked')).map(cb => cb.value);
+            
+            if (selectedCBs.length === 0) {
+                alert('Por favor selecciona al menos un servicio a cotizar.');
+                return;
+            }
+
             btn.innerText = 'Enviando...';
             btn.disabled = true;
 
             const form = e.target;
             const formData = new FormData(form);
-            const selectedService = formData.get('selected_service') || 'Sin especificar';
+            
+            // Consolidar servicios en una sola cadena para Web3Forms y GA4
+            const servicesSummary = selectedCBs.join(', ');
+            formData.set('selected_services_summary', servicesSummary);
 
             // 1. Enviar evento a GA4
             window.dataLayer = window.dataLayer || [];
@@ -933,7 +953,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 eventName: 'generate_lead',
                 event_params: {
                     lead_type: 'cotizacion_proyectos',
-                    service_requested: selectedService,
+                    service_requested: servicesSummary,
                     currency: 'USD'
                 }
             });
