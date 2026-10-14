@@ -654,24 +654,41 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             const selectedBoxes = Array.from(document.querySelectorAll('.calc-trigger:checked'));
             
             let totalAmount = 0;
-            const selectedServices = selectedBoxes.map(cb => {
-                totalAmount += parseInt(cb.value || 0);
-                return cb.dataset.service;
+            
+            // Construimos el arreglo de ítems dinámicamente con item_id e item_name
+            const itemsArray = selectedBoxes.map((cb, index) => {
+                const itemPrice = parseInt(cb.value || 0);
+                const itemName = cb.dataset.service || 'Servicio';
+                
+                totalAmount += itemPrice;
+
+                // Generamos un item_id limpio basado en el nombre (ej. "dashboard_power_bi")
+                const itemId = itemName.toLowerCase()
+                                       .replace(/[^a-z0-9]/g, '_')
+                                       .replace(/_+/g, '_');
+
+                return {
+                    item_id: itemId,
+                    item_name: itemName,
+                    price: itemPrice,
+                    quantity: 1
+                };
             });
 
-            const productName = selectedServices.length > 0 
-                ? selectedServices.join(', ') 
+            const productNameSummary = itemsArray.length > 0 
+                ? itemsArray.map(i => i.item_name).join(', ') 
                 : 'Sin servicio seleccionado';
 
-            // Disparo del evento add_to_cart con los parametros requeridos
+            // Disparo del evento ga4.trackEvent con el array items
             window.dataLayer = window.dataLayer || [];
             window.dataLayer.push({
                 event: 'ga4.trackEvent',
                 eventName: 'add_to_cart',
                 event_params: {
-                    producto: productName,
+                    producto: productNameSummary,
                     price: totalAmount,
-                    currency: 'USD'
+                    currency: 'USD',
+                    items: itemsArray // <--- Arreglo dinámico con item_id e item_name
                 }
             });
 
