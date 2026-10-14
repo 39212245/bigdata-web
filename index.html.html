@@ -414,10 +414,107 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </div>
 
         <!-- ================= VISTA: QUIÉNES SOMOS ================= -->
-        <div id="view-quienes-somos" class="page-view hidden max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-12">
-            <div class="text-center max-w-3xl mx-auto">
-                <h1 class="text-4xl font-extrabold text-brand-darkText mb-4">Especialistas en la Arquitectura de Datos</h1>
-                <p class="text-brand-mutedText text-lg">En Big Data ayudamos a empresas e-commerce, B2B y SaaS a estructurar sus activos analíticos con rigor técnico y claridad ejecutiva.</p>
+        <div id="view-quienes-somos" class="page-view hidden max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-16">
+            <!-- Hero / Misión Corporativa -->
+            <div class="text-center max-w-3xl mx-auto space-y-4">
+                <span class="px-3.5 py-1.5 rounded-full bg-brand-mintLight text-emerald-900 text-xs font-semibold border border-emerald-200 inline-block">
+                    Consultoría Estratégica & Arquitectura Analítica
+                </span>
+                <h1 class="text-4xl sm:text-5xl font-extrabold text-brand-darkText tracking-tight">
+                    Transformamos Ecosistemas de Datos en Ventajas Competitivas
+                </h1>
+                <p class="text-brand-mutedText text-lg leading-relaxed pt-2">
+                    Somos un equipo multidisciplinario boutique compuesto por 6 especialistas dedicados a cubrir el ciclo de vida completo del dato: desde la captura en Tag Management y el gobierno de GA4, hasta el modelado predictivo de Data Science y la activación en Pauta Digital.
+                </p>
+            </div>
+
+            <!-- Estructura del Equipo (6 Roles Clave) -->
+            <div class="space-y-8">
+                <div class="text-center">
+                    <h2 class="text-2xl font-bold text-brand-darkText">Estructura Organizacional & Liderazgo</h2>
+                    <p class="text-sm text-brand-mutedText mt-1">Especialización de punto a punto para garantizar rigor técnico y visión de negocio.</p>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-6">
+                    <!-- Director -->
+                    <div class="glass-card-light rounded-2xl p-6 space-y-3 relative overflow-hidden">
+                        <div class="w-10 h-10 rounded-xl bg-teal-500/10 text-brand-accent flex items-center justify-center mb-4">
+                            <i data-lucide="briefcase" class="w-5 h-5"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-brand-darkText">Dirección General & Estrategia</h3>
+                        <p class="text-xs font-semibold text-brand-accent uppercase tracking-wider">Director de Consultoría</p>
+                        <p class="text-xs text-brand-mutedText leading-relaxed">Lidera el alineamiento estratégico de los proyectos de analítica con los objetivos de negocio y retorno de inversión (ROI) de nuestros clientes.</p>
+                    </div>
+
+                    <!-- Gerente de Analytics -->
+                    <div class="glass-card-light rounded-2xl p-6 space-y-3">
+                        <div class="w-10 h-10 rounded-xl bg-teal-500/10 text-brand-accent flex items-center justify-center mb-4">
+                            <i data-lucide="bar-chart-2" class="w-5 h-5"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-brand-darkText">Digital Analytics & BI</h3>
+                        <p class="text-xs font-semibold text-brand-accent uppercase tracking-wider">Gerente de Analytics</p>
+                        <p class="text-xs text-brand-mutedText leading-relaxed">Supervisa la arquitectura de tableros ejecutivos en Looker Studio, Power BI y Tableau, asegurando integridad e interpretabilidad visual.</p>
+                    </div>
+
+                    <!-- Gerente de Data Science -->
+                    <div class="glass-card-light rounded-2xl p-6 space-y-3">
+                        <div class="w-10 h-10 rounded-xl bg-teal-500/10 text-brand-accent flex items-center justify-center mb-4">
+                            <i data-lucide="brain-circuit" class="w-5 h-5"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-brand-darkText">Modelado & Machine Learning</h3>
+                        <p class="text-xs font-semibold text-brand-accent uppercase tracking-wider">Gerente de Data Science</p>
+                        <p class="text-xs text-brand-mutedText leading-relaxed">Diseña modelos predictivos, análisis de Churn, LTV y segmentación avanzada para descubrir patrones profundos en grandes volúmenes de datos.</p>
+                    </div>
+
+                    <!-- Gerente de Performance -->
+                    <div class="glass-card-light rounded-2xl p-6 space-y-3">
+                        <div class="w-10 h-10 rounded-xl bg-teal-500/10 text-brand-accent flex items-center justify-center mb-4">
+                            <i data-lucide="target" class="w-5 h-5"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-brand-darkText">Activación & Pauta Digital</h3>
+                        <p class="text-xs font-semibold text-brand-accent uppercase tracking-wider">Gerente de Performance</p>
+                        <p class="text-xs text-brand-mutedText leading-relaxed">Garantiza la correcta atribución de conversiones hacia ecosistemas publicitarios (Google Ads, Meta, TikTok) para maximizar la rentabilidad publicitaria (ROAS).</p>
+                    </div>
+
+                    <!-- Implementador Tag Management -->
+                    <div class="glass-card-light rounded-2xl p-6 space-y-3">
+                        <div class="w-10 h-10 rounded-xl bg-teal-500/10 text-brand-accent flex items-center justify-center mb-4">
+                            <i data-lucide="code-2" class="w-5 h-5"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-brand-darkText">Arquitectura de Etiquetado</h3>
+                        <p class="text-xs font-semibold text-brand-accent uppercase tracking-wider">Especialista Implementador GTM / GA4</p>
+                        <p class="text-xs text-brand-mutedText leading-relaxed">Desarrolla capas de datos (DataLayer), tracking técnico Server-Side, pases de parámetros dinámicos y Consent Mode V2.</p>
+                    </div>
+
+                    <!-- Analista de Datos -->
+                    <div class="glass-card-light rounded-2xl p-6 space-y-3">
+                        <div class="w-10 h-10 rounded-xl bg-teal-500/10 text-brand-accent flex items-center justify-center mb-4">
+                            <i data-lucide="line-chart" class="w-5 h-5"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-brand-darkText">Análisis & Reportería Operativa</h3>
+                        <p class="text-xs font-semibold text-brand-accent uppercase tracking-wider">Analista de Datos</p>
+                        <p class="text-xs text-brand-mutedText leading-relaxed">Ejecuta auditorías diarias de datos, validación de eventos en producción, consultas SQL y elaboración de informes de seguimiento.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Valores / Por qué elegirnos -->
+            <div class="bg-white border border-brand-border rounded-2xl p-8 sm:p-12 shadow-sm grid md:grid-cols-3 gap-8 text-center md:text-left">
+                <div class="space-y-2">
+                    <div class="text-3xl font-extrabold text-brand-accent">100%</div>
+                    <div class="text-sm font-bold text-brand-darkText">Especialización Técnica</div>
+                    <p class="text-xs text-brand-mutedText">Sin intermediarios ni agencias generales. Trato directo con el equipo técnico y estratégico.</p>
+                </div>
+                <div class="space-y-2">
+                    <div class="text-3xl font-extrabold text-brand-accent">End-to-End</div>
+                    <div class="text-sm font-bold text-brand-darkText">Cobertura Holística</div>
+                    <p class="text-xs text-brand-mutedText">Desde el clic en el navegador y el código JavaScript hasta el dashboard gerencial y el modelo predictivo.</p>
+                </div>
+                <div class="space-y-2">
+                    <div class="text-3xl font-extrabold text-brand-accent">360°</div>
+                    <div class="text-sm font-bold text-brand-darkText">Gobierno del Dato</div>
+                    <p class="text-xs text-brand-mutedText">Garantizamos la privacidad, precisión de eventos y cumplimiento con las normativas globales de medición.</p>
+                </div>
             </div>
         </div>
 
