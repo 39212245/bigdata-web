@@ -829,21 +829,29 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 }
             }
 
-            // Solo enviamos el page_view dinámico en navegaciones SPA posteriores, NO en la carga inicial
+            // Solo enviamos el page_view dinámico en navegaciones SPA posteriores
             if (!isInitialLoad) {
                 window.dataLayer = window.dataLayer || [];
+                
+                // RESET / LIMPIEZA EXPLÍCITA DE EVENT_PARAMS DE E-COMMERCE
                 window.dataLayer.push({
                     event: 'ga4.trackEvent',
                     eventName: 'page_view',
                     event_params: {
                         page_location: window.location.href,
                         page_path: window.location.pathname,
-                        page_title: cleanPath || 'Inicio'
+                        page_title: cleanPath || 'Inicio',
+                        producto: undefined,
+                        price: undefined,
+                        currency: undefined,
+                        items: undefined,
+                        payment_type: undefined,
+                        transaction_id: undefined,
+                        value: undefined
                     }
                 });
             }
 
-            // Marcamos que la carga inicial ya concluyó
             isInitialLoad = false;
         }
 
@@ -1100,10 +1108,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 alert('Solicitud procesada correctamente.');
             }
 
+            // Limpieza del formulario y sesión
             sessionStorage.removeItem('selected_service_pdp');
             btn.innerText = 'Enviar Solicitud';
             btn.disabled = false;
             form.reset();
+
+            // Limpieza de los checkboxes del cotizador para reiniciar el estado
+            document.querySelectorAll('.calc-trigger').forEach(cb => cb.checked = false);
+            updateQuoteTotal();
+
+            // Navegar al inicio
             navigateTo(null, '/');
         }
 
