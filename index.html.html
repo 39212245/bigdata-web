@@ -66,7 +66,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     </style>
 </head>
 <body class="bg-brand-bg text-brand-darkText font-sans antialiased selection:bg-brand-mintLight selection:text-brand-darkText min-h-screen flex flex-col">
-<!-- Google Tag Manager (noscript) -->
+    <!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PNSVX7RJ"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
@@ -357,7 +357,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             </div>
         </div>
 
-        <!-- ================= VISTA: CHECKOUT (CON CHECKBOXES DE SERVICIOS) ================= -->
+        <!-- ================= VISTA: CHECKOUT (CHECKBOXES + METODO DE PAGO TEST) ================= -->
         <div id="view-checkout" class="page-view hidden max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <div class="text-center mb-10">
                 <h1 class="text-3xl font-extrabold text-brand-darkText mb-2">Finalizar Solicitud de Proyecto</h1>
@@ -423,6 +423,25 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     </div>
                 </div>
 
+                <!-- MÉTODOS DE PAGO / FACTURACIÓN FICTICIOS (PARA DISPARAR add_payment_info) -->
+                <div>
+                    <label class="block text-xs font-bold text-brand-darkText uppercase mb-3">Método de Pago / Facturación Preferido *</label>
+                    <div class="grid sm:grid-cols-3 gap-3">
+                        <label class="flex items-center gap-2 p-3 rounded-xl bg-white border border-brand-border cursor-pointer hover:border-brand-accent transition-all">
+                            <input type="radio" name="payment_type" value="Transferencia Bancaria" onchange="trackAddPaymentInfo('Transferencia Bancaria')" class="accent-teal-600" required>
+                            <span class="text-xs font-semibold text-brand-darkText">Transferencia</span>
+                        </label>
+                        <label class="flex items-center gap-2 p-3 rounded-xl bg-white border border-brand-border cursor-pointer hover:border-brand-accent transition-all">
+                            <input type="radio" name="payment_type" value="Tarjeta Corporativa (Test)" onchange="trackAddPaymentInfo('Tarjeta Corporativa')" class="accent-teal-600" checked>
+                            <span class="text-xs font-semibold text-brand-darkText">Tarjeta (Test)</span>
+                        </label>
+                        <label class="flex items-center gap-2 p-3 rounded-xl bg-white border border-brand-border cursor-pointer hover:border-brand-accent transition-all">
+                            <input type="radio" name="payment_type" value="Factura A / B" onchange="trackAddPaymentInfo('Factura A/B')" class="accent-teal-600">
+                            <span class="text-xs font-semibold text-brand-darkText">Factura A/B</span>
+                        </label>
+                    </div>
+                </div>
+
                 <input type="hidden" id="checkout-all-services" name="selected_services_summary" value="">
 
                 <button type="submit" id="submit-btn" class="w-full py-4 rounded-xl bg-brand-accent text-white font-bold hover:bg-brand-accentHover transition-all shadow-lg shadow-brand-accent/20">
@@ -442,11 +461,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     Transformamos Ecosistemas de Datos en Ventajas Competitivas
                 </h1>
                 <p class="text-brand-mutedText text-lg leading-relaxed pt-2">
-                    Somos un equipo multidisciplinario boutique compuesto por especialistas dedicados a cubrir el ciclo de vida completo del dato: desde la captura en Tag Management y el gobierno de GA4, hasta el modelado predictivo de Data Science y la activación en Pauta Digital.
+                    Somos un equipo multidisciplinario boutique compuesto por 6 especialistas dedicados a cubrir el ciclo de vida completo del dato: desde la captura en Tag Management y el gobierno de GA4, hasta el modelado predictivo de Data Science y la activación en Pauta Digital.
                 </p>
             </div>
 
-            <!-- Estructura del Equipo (Roles Clave) -->
+            <!-- Estructura del Equipo (6 Roles Clave) -->
             <div class="space-y-8">
                 <div class="text-center">
                     <h2 class="text-2xl font-bold text-brand-darkText">Estructura Organizacional & Liderazgo</h2>
@@ -671,9 +690,25 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </div>
     </footer>
 
-    <!-- LÓGICA DE NAVEGACIÓN Y DATALAYER -->
+    <!-- LÓGICA DE NAVEGACIÓN, COTIZADOR Y EVENTOS DE E-COMMERCE GA4 -->
     <script>
         let currentPDPKey = '';
+
+        const priceMap = {
+            'Dashboard Looker Studio': 150,
+            'Dashboard Power BI': 300,
+            'Dashboard Tableau Enterprise': 500,
+            'Setup e-Commerce GA4': 120,
+            'Implementación de GTM': 100
+        };
+
+        const serviceIdMap = {
+            'Dashboard Looker Studio': 101,
+            'Dashboard Power BI': 102,
+            'Dashboard Tableau Enterprise': 103,
+            'Setup e-Commerce GA4': 104,
+            'Implementación de GTM': 105
+        };
 
         const pdpData = {
             'looker-studio': {
@@ -687,10 +722,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     'Diseño UX corporativo responsivo.'
                 ],
                 time: 'Entrega estimada: 3 - 5 días hábiles',
-                // Rutas de tus imágenes para Looker Studio
                 images: [
-                    'https://portermetrics.com/wp-content/uploads/2020/09/Instagram-dashbaord-on-Google-Data-Studio-1536x1132.png',
-                    'https://seranking.com/es/blog/wp-content/uploads/sites/13/2025/05/informe-de-rankings-plantillas-de-looker-studio-media-1024x868.png'
+                    'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=600&q=80',
+                    'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=600&q=80'
                 ]
             },
             'power-bi': {
@@ -704,10 +738,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     'Publicación y permisos en Power BI Service.'
                 ],
                 time: 'Entrega estimada: 5 - 7 días hábiles',
-                // Rutas de tus imágenes para Power BI
                 images: [
-                    'https://media.finebi.com/strapi/Power_BI_Dashboard_2ea9daa96c.png',
-                    'https://learn.microsoft.com/es-es/power-bi/create-reports/media/sample-retail-analysis/retail1.png'
+                    'https://images.unsplash.com/photo-1543286386-713bdd548da4?auto=format&fit=crop&w=600&q=80',
+                    'https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?auto=format&fit=crop&w=600&q=80'
                 ]
             },
             'tableau': {
@@ -721,10 +754,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     'Conexión nativa a Data Warehouses (Snowflake, Redshift).'
                 ],
                 time: 'Entrega estimada: 7 - 10 días hábiles',
-                // Rutas de tus imágenes para Tableau
                 images: [
-                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTkkMCnJGJ1dKT9y1Gf2qwXCOerMTu7X1zVYzfJcftPbA&s=10',
-                    'https://cdns.tblsft.com/sites/default/files/pages/tableau_sales_growth_rates.png'
+                    'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=600&q=80',
+                    'https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=600&q=80'
                 ]
             },
             'ga4': {
@@ -738,10 +770,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     'Configuración de Consent Mode V2.'
                 ],
                 time: 'Entrega estimada: 2 - 4 días hábiles',
-                // Rutas de tus imágenes para GA4
                 images: [
-                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqjIdaUPkT0LVQRAWxmcPFDcge2ANgUQYCKwQD_lzH4QT4BbVOvVZ-KSI&s=10',
-                    'https://roianalytics.agency/wp-content/uploads/2024/06/Captura-de-pantalla-2024-06-26-a-las-14.56.00.png'
+                    'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=600&q=80',
+                    'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=600&q=80'
                 ]
             },
             'gtm': {
@@ -755,10 +786,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     'Activadores de clics, formularios y desplazamiento.'
                 ],
                 time: 'Entrega estimada: 2 - 3 días hábiles',
-                // Rutas de tus imágenes para GTM
                 images: [
-                    'https://static.semrush.com/blog/uploads/media/b8/cb/b8cbcfa12fe9e9d8e2d2a199993da8bd/aBMKu9Tjv9heLe2JWfOpUQM1nRYIFzkG36umCkmjtraIbXX_JV031Z8BCIzvVG9J9JDDjzQ2f8i6V-6skN3lEq6YfDJ8U_-6NAsdkBNfIpGyEam17d3eqDcm-yOOUICw877nMNaZ29tYStuqg__6lF4.jpeg',
-                    'https://www.davirbonilla.com/wp-content/uploads/google-tag-manager-que-es.jpg'
+                    'https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?auto=format&fit=crop&w=600&q=80',
+                    'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=600&q=80'
                 ]
             }
         };
@@ -779,6 +809,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 document.getElementById('view-pdp').classList.remove('hidden');
             } else if (cleanPath === 'cotizador') {
                 document.getElementById('view-cotizador').classList.remove('hidden');
+                updateQuoteTotal();
             } else if (cleanPath === 'checkout') {
                 syncCheckoutFields();
                 document.getElementById('view-checkout').classList.remove('hidden');
@@ -822,7 +853,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             const list = document.getElementById('pdp-features');
             list.innerHTML = data.features.map(f => `<li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-brand-accent"></i> ${f}</li>`).join('');
 
-            // Renderizado dinámico de la galería según el producto
             const gallery = document.getElementById('pdp-gallery');
             if (data.images && data.images.length > 0) {
                 gallery.innerHTML = data.images.map((imgUrl, index) => `
@@ -847,34 +877,38 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             navigateTo(null, '/checkout');
         }
 
+        function updateQuoteTotal() {
+            let total = 0;
+            const selectedCheckboxes = document.querySelectorAll('#view-cotizador .calc-trigger:checked');
+            selectedCheckboxes.forEach(cb => {
+                total += parseInt(cb.value || 0, 10);
+            });
+            const totalEl = document.getElementById('quote-total');
+            if (totalEl) {
+                totalEl.innerText = `$${total} USD`;
+            }
+        }
+
+        document.addEventListener('change', (e) => {
+            if (e.target && e.target.classList.contains('calc-trigger')) {
+                updateQuoteTotal();
+            }
+        });
+
+        // 1. EVENTO: add_to_cart (se llama desde el botón "Ir al Checkout" del cotizador)
         function handleAddToCartAndCheckout(event) {
             if (event) event.preventDefault();
-
-            // Mapa de IDs numéricos únicos por cada servicio
-            const serviceIdMap = {
-                'Dashboard Looker Studio': 16254,
-                'Dashboard Power BI': 17465,
-                'Dashboard Tableau Enterprise': 19855,
-                'Setup e-Commerce GA4': 12845,
-                'Implementación de GTM': 10655
-            };
 
             const selectedBoxes = Array.from(document.querySelectorAll('.calc-trigger:checked'));
             
             let totalAmount = 0;
-            
-            // Construimos el arreglo de ítems con ID numérico
             const itemsArray = selectedBoxes.map((cb, index) => {
-                const itemPrice = parseInt(cb.value || 0);
+                const itemPrice = parseInt(cb.value || 0, 10);
                 const itemName = cb.dataset.service || 'Servicio';
-                
                 totalAmount += itemPrice;
 
-                // Retorna el ID numérico correspondiente del mapa (o un número por defecto)
-                const numericItemId = serviceIdMap[itemName] || (200 + index);
-
                 return {
-                    item_id: numericItemId,
+                    item_id: serviceIdMap[itemName] || (101 + index),
                     item_name: itemName,
                     price: itemPrice,
                     quantity: 1
@@ -885,7 +919,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 ? itemsArray.map(i => i.item_name).join(', ') 
                 : 'Sin servicio seleccionado';
 
-            // Disparo del evento ga4.trackEvent con el array items
             window.dataLayer = window.dataLayer || [];
             window.dataLayer.push({
                 event: 'ga4.trackEvent',
@@ -894,19 +927,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     producto: productNameSummary,
                     price: totalAmount,
                     currency: 'USD',
-                    items: itemsArray // <--- Arreglo dinámico con item_id numérico
+                    items: itemsArray
                 }
             });
 
-            // Redireccionar al checkout
             navigateTo(null, '/checkout');
         }
 
+        // Sincronización de casillas al entrar al Checkout + Disparo de begin_checkout
         function syncCheckoutFields() {
-            // Desmarcar todas las checkboxes del checkout primero
             document.querySelectorAll('.checkout-service-cb').forEach(cb => cb.checked = false);
 
-            // 1. Obtener servicios seleccionados en el cotizador interactivo
             const selectedFromCalculator = Array.from(document.querySelectorAll('.calc-trigger:checked')).map(cb => cb.dataset.service);
 
             if (selectedFromCalculator.length > 0) {
@@ -915,20 +946,81 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     if (match) match.checked = true;
                 });
             } else {
-                // 2. Si vino desde una PDP
                 const pdpService = sessionStorage.getItem('selected_service_pdp');
                 if (pdpService) {
                     const match = document.querySelector(`.checkout-service-cb[value="${pdpService}"]`);
                     if (match) match.checked = true;
                 }
             }
+
+            trackBeginCheckout();
         }
 
+        // 2. EVENTO: begin_checkout
+        function trackBeginCheckout() {
+            const selectedCBs = Array.from(document.querySelectorAll('.checkout-service-cb:checked'));
+            if (selectedCBs.length === 0) return;
+
+            let totalAmount = 0;
+            const itemsArray = selectedCBs.map((cb, index) => {
+                const price = priceMap[cb.value] || 100;
+                totalAmount += price;
+
+                return {
+                    item_id: serviceIdMap[cb.value] || (101 + index),
+                    item_name: cb.value,
+                    price: price,
+                    quantity: 1
+                };
+            });
+
+            window.dataLayer = window.dataLayer || [];
+            window.dataLayer.push({
+                event: 'ga4.trackEvent',
+                eventName: 'begin_checkout',
+                event_params: {
+                    currency: 'USD',
+                    value: totalAmount,
+                    items: itemsArray
+                }
+            });
+        }
+
+        // 3. EVENTO: add_payment_info
+        function trackAddPaymentInfo(paymentType) {
+            const selectedCBs = Array.from(document.querySelectorAll('.checkout-service-cb:checked'));
+            let totalAmount = 0;
+
+            const itemsArray = selectedCBs.map((cb, index) => {
+                const price = priceMap[cb.value] || 100;
+                totalAmount += price;
+
+                return {
+                    item_id: serviceIdMap[cb.value] || (101 + index),
+                    item_name: cb.value,
+                    price: price,
+                    quantity: 1
+                };
+            });
+
+            window.dataLayer = window.dataLayer || [];
+            window.dataLayer.push({
+                event: 'ga4.trackEvent',
+                eventName: 'add_payment_info',
+                event_params: {
+                    currency: 'USD',
+                    value: totalAmount,
+                    payment_type: paymentType,
+                    items: itemsArray
+                }
+            });
+        }
+
+        // 4. EVENTO: purchase (al enviar el formulario de checkout)
         async function handleCheckoutSubmit(e) {
             e.preventDefault();
             const btn = document.getElementById('submit-btn');
 
-            // Obtener servicios tildados en el formulario de checkout
             const selectedCBs = Array.from(document.querySelectorAll('.checkout-service-cb:checked')).map(cb => cb.value);
             
             if (selectedCBs.length === 0) {
@@ -941,13 +1033,43 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
             const form = e.target;
             const formData = new FormData(form);
-            
-            // Consolidar servicios en una sola cadena para Web3Forms y GA4
             const servicesSummary = selectedCBs.join(', ');
+            const paymentType = formData.get('payment_type') || 'Tarjeta Corporativa (Test)';
+
+            const transactionId = 'ORD-' + Math.floor(100000 + Math.random() * 900000);
+
+            let totalAmount = 0;
+            const itemsArray = selectedCBs.map((serviceName, index) => {
+                const price = priceMap[serviceName] || 100;
+                totalAmount += price;
+
+                return {
+                    item_id: serviceIdMap[serviceName] || (101 + index),
+                    item_name: serviceName,
+                    price: price,
+                    quantity: 1
+                };
+            });
+
             formData.set('selected_services_summary', servicesSummary);
 
-            // 1. Enviar evento a GA4
+            // A. Disparar el evento purchase a GA4
             window.dataLayer = window.dataLayer || [];
+            window.dataLayer.push({
+                event: 'ga4.trackEvent',
+                eventName: 'purchase',
+                event_params: {
+                    transaction_id: transactionId,
+                    value: totalAmount,
+                    tax: 0,
+                    shipping: 0,
+                    currency: 'USD',
+                    payment_type: paymentType,
+                    items: itemsArray
+                }
+            });
+
+            // B. Enviar evento genérico generate_lead
             window.dataLayer.push({
                 event: 'ga4.trackEvent',
                 eventName: 'generate_lead',
@@ -958,14 +1080,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 }
             });
 
-            // 2. Enviar datos al correo mediante Web3Forms
+            // C. Enviar formulario por Web3Forms
             try {
                 const response = await fetch('https://api.web3forms.com/submit', {
                     method: 'POST',
                     body: formData
                 });
                 if (response.ok) {
-                    alert('¡Gracias por tu solicitud! La información ha sido enviada con éxito.');
+                    alert(`¡Gracias por tu solicitud! Transacción registrada (${transactionId}).`);
                 } else {
                     alert('Solicitud procesada y enviada.');
                 }
@@ -989,3 +1111,5 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             renderRoute(window.location.pathname);
         });
     </script>
+</body>
+</html>
